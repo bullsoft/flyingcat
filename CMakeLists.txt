@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 2.6)
 
 
 SET(FLYINGCAT_VERSION "0.0.1")
+set(CMAKE_COLOR_MAKEFILE   ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set(LIBPHENOM_PATH "" CACHE PATH "Path for libphenom")
