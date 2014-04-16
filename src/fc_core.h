@@ -19,12 +19,19 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA 02110-1301, USA.
  */
+#ifndef FC_CORE_H
+#define FC_CORE_H
 
-#include "fc_core.h"
+#include "config.h"
 
-int main(int argc, char *argv[])
-{
-    struct flyingcat fc;
+#include <sys/types.h>
 
-    return 0;
-}
+struct flyingcat {
+    int   log_level;
+    char *log_file;
+    char *conf_file;
+    pid_t pid;
+    char *pid_file;
+};
+
+#endif
