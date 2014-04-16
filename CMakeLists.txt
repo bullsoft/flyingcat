@@ -22,7 +22,7 @@ include_directories(${LIBPHENOM_PATH}/include
 link_directories(${LIBPHENOM_PATH}/lib)
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-set(CMAKE_INSTALL_RPATH "${LIBPHENOM_PATH}/lib")
+#set(CMAKE_INSTALL_RPATH "${LIBPHENOM_PATH}/lib")
 
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
