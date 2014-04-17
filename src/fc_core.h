@@ -29,11 +29,13 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <errno.h>
+#include <string.h>
 
 #include <sys/stat.h>
 #include <fcntl.h>
 
 #include "fc_log.h"
+#include "fc_util.h"
 
 typedef intptr_t     fc_int_t;
 typedef uintptr_t    fc_uint_t;
@@ -46,6 +48,7 @@ struct flyingcat {
     pid_t pid;
     char *pid_file;
 
+    char hostname[FC_MAXHOSTNAMELEN];
     fc_log_t *log;
 };
 

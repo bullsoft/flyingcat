@@ -22,6 +22,11 @@
 
 #include "fc_core.h"
 
+#define FC_LOG_DEFAULT   FC_LOG_NOTICE
+#define FC_LOG_PATH      "logs/fc.log"
+#define FC_PIDFILE_PATH  "logs/fc.pid"
+#define FC_CONF_PATH     "conf/fc.conf"
+
 static int fc_daemonize(fc_log_t *log)
 {
     pid_t pid;
@@ -98,9 +103,32 @@ DUP2FAILED:
     return FC_ERROR;
 }
 
+static void fc_set_default_instance(struct flyingcat *fc)
+{
+    fc->log_level = FC_LOG_DEFAULT;
+    fc->log_file  = FC_LOG_PATH;
+
+    fc->conf_file = FC_CONF_PATH;
+
+    if (gethostname(fc->hostname, FC_MAXHOSTNAMELEN)) {
+        fc_log_warn(fc->log, "gethostname() failed: %s", strerror(errno));
+        strncpy(fc->hostname, "unknown", sizeof("unknown")); // no -1 here
+    }
+    fc->hostname[FC_MAXHOSTNAMELEN - 1] = '\0';
+
+    fc->pid      = (pid_t)-1;
+    fc->pid_file = FC_PIDFILE_PATH;
+}
+
+static int fc_init_instance(struct flyingcat *fc)
+{
+}
+
 int main(int argc, char *argv[])
 {
     struct flyingcat fc;
+
+    fc_set_default_instance(&fc);
 
     return 0;
 }

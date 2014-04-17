@@ -12,7 +12,7 @@ if (NOT LIBPHENOM_PATH)
         "Please specify libphenom path with -DLIBPHENOM_PATH=/path/to/libphenom")
 endif(NOT LIBPHENOM_PATH)
 
-# whether log_debug() is available
+# whether fc_log_debug() is available
 if (CMAKE_BUILD_TYPE)
     string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
 endif (CMAKE_BUILD_TYPE)
