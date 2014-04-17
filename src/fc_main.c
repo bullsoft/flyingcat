@@ -63,7 +63,7 @@ static int fc_daemonize(fc_log_t *log)
     return FC_OK;
 }
 
-static int fc_redirect(struct flyingcat *fc)
+static int fc_redirect_io(struct flyingcat_s *fc)
 {
     int   fd;
     char *ptr;
@@ -103,7 +103,7 @@ DUP2FAILED:
     return FC_ERROR;
 }
 
-static void fc_set_default_instance(struct flyingcat *fc)
+static void fc_set_default_instance(struct flyingcat_s *fc)
 {
     fc->log_level = FC_LOG_DEFAULT;
     fc->log_file  = FC_LOG_PATH;
@@ -120,13 +120,13 @@ static void fc_set_default_instance(struct flyingcat *fc)
     fc->pid_file = FC_PIDFILE_PATH;
 }
 
-static int fc_init_instance(struct flyingcat *fc)
+static int fc_init_instance(struct flyingcat_s *fc)
 {
 }
 
 int main(int argc, char *argv[])
 {
-    struct flyingcat fc;
+    struct flyingcat_s fc;
 
     fc_set_default_instance(&fc);
 

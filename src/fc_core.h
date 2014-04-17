@@ -41,7 +41,7 @@ typedef intptr_t     fc_int_t;
 typedef uintptr_t    fc_uint_t;
 typedef intptr_t     fc_flag_t;
 
-struct flyingcat {
+struct flyingcat_s {
     int   log_level;
     char *log_file;
     char *conf_file;
