@@ -62,7 +62,7 @@ extern fc_log log;
 
 #define log(...) do {                              \
     _log(__FILE__, __LINE__, __VA_ARGS__);         \
-while(0)
+} while(0)
 
 #define fc_log_warn(...) do {                      \
     if (log.log_level >= FC_LOG_WARN)              \
