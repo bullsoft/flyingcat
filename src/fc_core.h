@@ -26,6 +26,12 @@
 #include "config.h"
 
 #include <sys/types.h>
+#include <stdint.h>
+#include <unistd.h>
+
+typedef intptr_t     fc_int_t;
+typedef uintptr_t    fc_uint_t;
+typedef intptr_t     fc_flag_t;
 
 struct flyingcat {
     int   log_level;

@@ -1,1 +1,8 @@
+#ifndef FLYINGCAT_CONFIG_H
+#define FLYINGCAT_CONFIG_H
+
 #define FLYINGCAT_VERSION "${FLYINGCAT_VERSION}"
+
+#cmakedefine FC_DEBUG_LOG
+
+#endif

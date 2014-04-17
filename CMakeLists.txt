@@ -13,6 +13,12 @@ if (NOT LIBPHENOM_PATH)
         "Please specify libphenom path with -DLIBPHENOM_PATH=/path/to/libphenom")
 endif(NOT LIBPHENOM_PATH)
 
+# whether log_debug() is available
+string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
+if (BUILD_TYPE STREQUAL "DEBUG" OR DEBUG_LOG)
+    set(FC_DEBUG_LOG TRUE)
+endif (BUILD_TYPE STREQUAL "DEBUG" OR DEBUG_LOG)
+
 include_directories(${LIBPHENOM_PATH}/include
                     ${CMAKE_CURRENT_BINARY_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}/src
