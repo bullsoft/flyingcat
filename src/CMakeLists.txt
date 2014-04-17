@@ -1,5 +1,6 @@
 set(flyingcat_SRCS
     fc_main.c
+    fc_log.c
 )
 
 add_executable(flyingcat ${flyingcat_SRCS})

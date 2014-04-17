@@ -29,6 +29,7 @@
 #define FC_LOG_ERR       4
 #define FC_LOG_ERROR     FC_LOG_ERR
 #define FC_LOG_WARN      5
+#define FC_LOG_WARNING   FC_LOG_WARN
 #define FC_LOG_NOTICE    6
 #define FC_LOG_INFO      7
 #define FC_LOG_DEBUG     8
@@ -36,48 +37,48 @@
 
 #define FC_MAX_ERR_STR   1024
 
-struct fc_log {
+struct fc_log_s {
     int   log_level;
     char *file;
     int   fd;
 };
 
-extern fc_log log;
+typedef struct fc_log_s fc_log_t;
 
 #ifdef FC_DEBUG_LOG
 
-#define fc_log_debug(level, ...) do {              \
-    if (log.log_level >= level)                    \
-        _log(__FILE__, __LINE__, __VA_ARGS__);     \
+#define fc_log_debug(log, level, ...) do {          \
+    if ((log)->log_level >= level)                  \
+        _log(log, __FILE__, __LINE__, __VA_ARGS__); \
 } while(0)
 
 #else
 
-#define fc_log_debug(level, ...)
+#define fc_log_debug(log, level, ...)
 
 #endif
 
-#define fc_log_stderr(...)                         \
+#define fc_log_stderr(...)                          \
     _log_stderr(__VA_ARGS__)
 
-#define log(...) do {                              \
-    _log(__FILE__, __LINE__, __VA_ARGS__);         \
+#define fc_log(log, ...) do {                       \
+    _log(log, __FILE__, __LINE__, __VA_ARGS__);     \
 } while(0)
 
-#define fc_log_warn(...) do {                      \
-    if (log.log_level >= FC_LOG_WARN)              \
-        _log(__FILE__, __LINE, __VA_ARGS__);       \
+#define fc_log_warn(log, ...) do {                  \
+    if ((log)->log_level >= FC_LOG_WARN)            \
+        _log(log, __FILE__, __LINE__, __VA_ARGS__); \
 } while(0)
  
-#define fc_log_error(...) do {                     \
-    if (log.log_level >= FC_LOG_ERROR)             \
-        _log(__FILE__, __LINE, __VA_ARGS__);       \
+#define fc_log_error(log, ...) do {                 \
+    if ((log)->log_level >= FC_LOG_ERROR)           \
+        _log(log, __FILE__, __LINE__, __VA_ARGS__); \
 } while(0)
 
-int   log_init(int level, const char *filename);
-void  log_close();
-void  log_reopen();
-void _log(const char *file, int line, const char *fmt, ...);
+fc_log_t *fc_log_init(int level, const char *filename);
+void  fc_log_close(fc_log_t  *log);
+void  fc_log_reopen(fc_log_t *log);
+void _log(fc_log_t *log, const char *file, int line, const char *fmt, ...);
 void _log_stderr();
 
 #endif

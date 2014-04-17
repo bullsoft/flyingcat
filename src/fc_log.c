@@ -20,39 +20,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef FC_CORE_H
-#define FC_CORE_H
-
-#include "config.h"
-
-#include <sys/types.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <errno.h>
-
-#include <sys/stat.h>
-#include <fcntl.h>
+#include <string.h>
 
 #include "fc_log.h"
 
-typedef intptr_t     fc_int_t;
-typedef uintptr_t    fc_uint_t;
-typedef intptr_t     fc_flag_t;
+fc_log_t *fc_log_init(int level, const char *filename)
+{
+    return NULL;
+}
 
-struct flyingcat {
-    int   log_level;
-    char *log_file;
-    char *conf_file;
-    pid_t pid;
-    char *pid_file;
+void fc_log_close(fc_log_t *log)
+{
+}
 
-    fc_log_t *log;
-};
+void fc_log_reopen(fc_log_t *log)
+{
+}
 
-#define FC_OK      0
-#define FC_ERROR  -1
-#define FC_AGAIN  -2
-#define FC_NOMEM  -3
-#define FC_ABORT  -4
+void _log(fc_log_t *log, const char *file, int line, const char *fmt, ...)
+{
+}
 
-#endif
+void _log_stderr()
+{
+}
+
