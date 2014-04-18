@@ -25,8 +25,11 @@
 
 #include <signal.h>
 
-#define fc_signal_name(n)       "SIG" #n
-#define fc_signal_value(n)      SIG##n
+#define fc_signal_name_help(n)  "SIG" #n
+#define fc_signal_name(n)       fc_signal_name_help(n)
+
+#define fc_signal_value_help(n) SIG##n
+#define fc_signal_value(n)      fc_signal_value_help(n)
 
 #define FC_SIGNAL_SHUTDOWN      QUIT
 #define FC_SIGNAL_TERMINATE     TERM
