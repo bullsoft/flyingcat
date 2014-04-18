@@ -29,4 +29,8 @@
 # define FC_MAXHOSTNAMELEN  256
 #endif
 
+#ifndef __GNUC__
+# define __attribute__(x)
+#endif
+
 #endif

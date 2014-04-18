@@ -41,7 +41,7 @@ void _log(fc_log_t *log, const char *file, int line, const char *fmt, ...)
 {
 }
 
-void _log_stderr()
+void _log_stderr(const char *fmt, ...)
 {
 }
 

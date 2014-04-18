@@ -23,6 +23,8 @@
 #ifndef FC_LOG_H
 #define FC_LOG_H
 
+#include "fc_util.h" // only need __attribute__
+
 #define FC_LOG_EMERG     1
 #define FC_LOG_ALERT     2
 #define FC_LOG_CRIT      3
@@ -78,7 +80,8 @@ typedef struct fc_log_s fc_log_t;
 fc_log_t *fc_log_init(int level, const char *filename);
 void  fc_log_close(fc_log_t  *log);
 void  fc_log_reopen(fc_log_t *log);
-void _log(fc_log_t *log, const char *file, int line, const char *fmt, ...);
-void _log_stderr();
+void _log(fc_log_t *log, const char *file, int line,
+          const char *fmt, ...) __attribute__((format(printf, 4, 5)));
+void _log_stderr(const char *fmt, ...) __attribute((format(printf, 1, 2)));
 
 #endif

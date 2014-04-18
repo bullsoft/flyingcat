@@ -20,43 +20,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef FC_CORE_H
-#define FC_CORE_H
+#ifndef FC_SIGNAL_H
+#define FC_SIGNAL_H
 
-#include "config.h"
+#include <signal.h>
 
-#include <sys/types.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
+#define fc_signal_name(n)       "SIG" #n
+#define fc_signal_value(n)      SIG##n
 
-#include <sys/stat.h>
-#include <fcntl.h>
-
-#include "fc_log.h"
-#include "fc_util.h"
-#include "fc_signal.h"
-
-typedef intptr_t     fc_int_t;
-typedef uintptr_t    fc_uint_t;
-typedef intptr_t     fc_flag_t;
-
-struct flyingcat_s {
-    int   log_level;
-    char *log_file;
-    char *conf_file;
-    pid_t pid;
-    char *pid_file;
-
-    char hostname[FC_MAXHOSTNAMELEN];
-    fc_log_t *log;
-};
-
-#define FC_OK      0
-#define FC_ERROR  -1
-#define FC_AGAIN  -2
-#define FC_NOMEM  -3
-#define FC_ABORT  -4
+#define FC_SIGNAL_SHUTDOWN      QUIT
+#define FC_SIGNAL_TERMINATE     TERM
+#define FC_SIGNAL_RECONFIGURE   HUP
+#define FC_SIGNAL_REOPEN        USR1
 
 #endif
