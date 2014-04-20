@@ -21,8 +21,13 @@
  */
 
 #include <string.h>
+#include <stdlib.h>
 
 #include "fc_log.h"
+
+#if defined(HAVE_BACKTRACE) && defined(HAVE_BACKTRACE_SYMBOLS)
+# include <execinfo.h>
+#endif
 
 fc_log_t *fc_log_init(int level, const char *filename)
 {
@@ -44,4 +49,21 @@ void _log(fc_log_t *log, const char *file, int line, const char *fmt, ...)
 void _log_stderr(const char *fmt, ...)
 {
 }
+
+#if defined(HAVE_BACKTRACE) && defined(HAVE_BACKTRACE_SYMBOLS)
+void fc_log_backtrace(fc_log_t *log){
+    void  *bt_buffer[32];
+    size_t bt_size, i;
+    char **bt_strings;
+
+    bt_size    = backtrace(bt_buffer, sizeof(bt_buffer) / sizeof(bt_buffer[0]));
+    bt_strings = backtrace_symbols(bt_buffer, bt_size);
+
+    for (i = 0; i < bt_size; i++) {
+        fc_log(log, "%s", bt_strings[i]);
+    }
+
+    free(bt_strings);
+}
+#endif
 

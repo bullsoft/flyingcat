@@ -23,6 +23,7 @@
 #ifndef FC_LOG_H
 #define FC_LOG_H
 
+#include "config.h"
 #include "fc_util.h" // only need __attribute__
 
 #define FC_LOG_EMERG     1
@@ -76,6 +77,12 @@ typedef struct fc_log_s fc_log_t;
     if ((log)->log_level >= FC_LOG_ERROR)           \
         _log(log, __FILE__, __LINE__, __VA_ARGS__); \
 } while(0)
+
+#if defined(HAVE_BACKTRACE) && defined(HAVE_BACKTRACE_SYMBOLS)
+  void fc_log_backtrace(fc_log_t *log);
+#else
+# define fc_log_backtrace(log)
+#endif
 
 fc_log_t *fc_log_init(int level, const char *filename);
 void  fc_log_close(fc_log_t  *log);

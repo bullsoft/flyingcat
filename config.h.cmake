@@ -5,4 +5,7 @@
 
 #cmakedefine FC_DEBUG_LOG
 
+#cmakedefine HAVE_BACKTRACE
+#cmakedefine HAVE_BACKTRACE_SYMBOLS
+
 #endif

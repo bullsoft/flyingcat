@@ -20,6 +20,14 @@ if (BUILD_TYPE STREQUAL "DEBUG" OR DEBUG_LOG)
     set(FC_DEBUG_LOG TRUE)
 endif (BUILD_TYPE STREQUAL "DEBUG" OR DEBUG_LOG)
 
+# check header files
+include(CheckIncludeFiles)
+
+# check functions
+include(CheckFunctionExists)
+check_function_exists(backtrace HAVE_BACKTRACE)
+check_function_exists(backtrace_symbols HAVE_BACKTRACE_SYMBOLS)
+
 include_directories(${LIBPHENOM_PATH}/include
                     ${CMAKE_CURRENT_BINARY_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}/src
