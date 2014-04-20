@@ -65,7 +65,8 @@ fc_log_t *fc_log_init(int level, const char *filename)
 
     log->fd = open(filename, O_WRONLY|O_APPEND|O_CREAT, 0644);
     if (log->fd < 0) {
-        log_stderr("open log file '%s' failed: %s", filename, strerror(errno));
+        fc_log_stderr("open log file '%s' failed: %s", filename,
+                      strerror(errno));
         free(log);
         return NULL;
     }
