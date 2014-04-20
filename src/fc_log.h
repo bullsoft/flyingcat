@@ -26,17 +26,17 @@
 #include "config.h"
 #include "fc_util.h" // only need __attribute__
 
-#define FC_LOG_EMERG     1
-#define FC_LOG_ALERT     2
-#define FC_LOG_CRIT      3
-#define FC_LOG_ERR       4
+#define FC_LOG_EMERG     0
+#define FC_LOG_ALERT     1
+#define FC_LOG_CRIT      2
+#define FC_LOG_ERR       3
 #define FC_LOG_ERROR     FC_LOG_ERR
-#define FC_LOG_WARN      5
+#define FC_LOG_WARN      4
 #define FC_LOG_WARNING   FC_LOG_WARN
-#define FC_LOG_NOTICE    6
-#define FC_LOG_INFO      7
-#define FC_LOG_DEBUG     8
-#define FC_LOG_VERB      9
+#define FC_LOG_NOTICE    5
+#define FC_LOG_INFO      6
+#define FC_LOG_DEBUG     7
+#define FC_LOG_VERB      8
 
 #define FC_MAX_ERR_STR   1024
 

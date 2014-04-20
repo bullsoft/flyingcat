@@ -21,7 +21,13 @@
  */
 
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <unistd.h>
+
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "fc_log.h"
 
@@ -29,9 +35,41 @@
 # include <execinfo.h>
 #endif
 
+static const char *loglevel_desc[] = {
+    "emerge",
+    "alert",
+    "critical",
+    "error",
+    "warning",
+    "notice",
+    "info",
+    "debug",
+    "verb",
+};
+
+#define FC_LOG_MAX_LEVEL FC_LOG_VERB
+
 fc_log_t *fc_log_init(int level, const char *filename)
 {
-    return NULL;
+    fc_log_t *log = (fc_log_t *)malloc(sizeof(fc_log_t));
+    if (log == NULL) {
+        return NULL;
+    }
+
+    log->log_level = (level > FC_LOG_MAX_LEVEL ? FC_LOG_INFO : level);
+    log->file = (char *)filename;
+    if (!filename || !strlen(filename)) {
+        log->fd = STDERR_FILENO;
+        return log;
+    }
+
+    log->fd = open(filename, O_WRONLY|O_APPEND|O_CREAT, 0644);
+    if (log->fd < 0) {
+        log_stderr("open log file '%s' failed: %s", filename, strerror(errno));
+        free(log);
+        return NULL;
+    }
+    return log;
 }
 
 void fc_log_close(fc_log_t *log)

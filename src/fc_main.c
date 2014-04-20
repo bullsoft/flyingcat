@@ -22,7 +22,7 @@
 
 #include "fc_core.h"
 
-#define FC_LOG_DEFAULT   FC_LOG_NOTICE
+#define FC_LOG_DEFAULT   FC_LOG_INFO
 #define FC_LOG_PATH      "logs/fc.log"
 #define FC_PIDFILE_PATH  "logs/fc.pid"
 #define FC_CONF_PATH     "conf/fc.conf"
