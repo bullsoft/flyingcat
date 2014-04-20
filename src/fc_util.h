@@ -31,6 +31,7 @@
 
 #ifndef __GNUC__
 # define __attribute__(x)
+# define __FUNCTION__
 #endif
 
 #endif
