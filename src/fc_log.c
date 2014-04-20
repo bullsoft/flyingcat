@@ -63,7 +63,7 @@ fc_log_t *fc_log_init(int level, const char *filename)
         return log;
     }
 
-    log->fd = open(filename, O_WRONLY|O_APPEND|O_CREAT, 0644);
+    log->fd = open(filename, O_WRONLY | O_APPEND | O_CREAT, 0644);
     if (log->fd < 0) {
         fc_log_stderr("open log file '%s' failed: %s", filename,
                       strerror(errno));
@@ -75,10 +75,27 @@ fc_log_t *fc_log_init(int level, const char *filename)
 
 void fc_log_close(fc_log_t *log)
 {
+    if (log->fd > 0 && log->fd != STDERR_FILENO) {
+        close(log->fd);
+    }
+
+    free(log);
 }
 
 void fc_log_reopen(fc_log_t *log)
 {
+    if (log->fd == STDERR_FILENO) {
+        return;
+    }
+
+    if (log->fd > 0) {
+        close(log->fd);
+    }
+    log->fd = open(log->file, O_WRONLY | O_APPEND | O_CREAT, 0644);
+    if (log->fd < 0) {
+        fc_log_stderr("reopen log file '%s' failed: %s", log->file,
+                      strerror(errno));
+    }
 }
 
 void _log(fc_log_t *log, const char *file, int line, const char *fmt, ...)
