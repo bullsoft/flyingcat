@@ -56,7 +56,7 @@ fc_log_t *fc_log_init(int level, const char *filename)
         return NULL;
     }
 
-    log->log_level = (level > FC_LOG_MAX_LEVEL ? FC_LOG_INFO : level);
+    log->log_level = max(FC_LOG_VERB, min(FC_LOG_EMERG, level));
     log->file = (char *)filename;
     if (!filename || !strlen(filename)) {
         log->fd = STDERR_FILENO;
