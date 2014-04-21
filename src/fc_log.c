@@ -25,7 +25,9 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <unistd.h>
+#include <time.h>
 
+#include <sys/time.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
@@ -49,6 +51,7 @@ static const char *loglevel_desc[] = {
 };
 
 #define FC_LOG_MAX_LEVEL FC_LOG_VERB
+#define MAX_LEVEL_DESC_LEN  (sizeof("critical") - 1)
 
 fc_log_t *fc_log_init(int level, const char *filename)
 {
@@ -101,6 +104,39 @@ void fc_log_reopen(fc_log_t *log)
 
 void _log(fc_log_t *log, const char *file, int line, int level, const char *fmt, ...)
 {
+    int     len, size, errno_save;
+    char    buf[FC_MAX_ERR_STR];
+    va_list args;
+    struct  timeval tv;
+    struct  tm *tm;
+
+    if (log->fd < 0) {
+        return;
+    }
+
+    gettimeofday(&tv, NULL);
+    tm = localtime(&tv.tv_sec);
+
+    errno_save = errno;
+    len  = 0;
+    size = FC_MAX_ERR_STR;
+    len += fc_scnprintf(buf + len, size - len, "[%02d-%02d %02d:%02d:%02d.%ld] "
+                                               "[%*s] %s:%d ",
+                        tm->tm_mon,  tm->tm_mday,
+                        tm->tm_hour, tm->tm_min, tm->tm_sec,
+                        tv.tv_usec,
+                        MAX_LEVEL_DESC_LEN,
+                        loglevel_desc[level],
+                        file, line);
+
+    va_start(args, fmt);
+    len += fc_vscnprintf(buf + len, size - len, fmt, args);
+    va_end(args);
+
+    buf[len++] = '\n';
+
+    write(log->fd, buf, len);
+    errno = errno_save;
 }
 
 void _log_stderr(const char *fmt, ...)

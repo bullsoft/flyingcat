@@ -25,7 +25,7 @@
 
 #include <stdarg.h>
 
-#define fc_scnprintf(buf, size, ...)    \
+#define fc_scnprintf(buf, size, ...)          \
         _scnprintf((char *)(buf), (size_t)(size), __VA_ARGS__)
     
 #define fc_vscnprintf(str, size, fmt, args)   \
