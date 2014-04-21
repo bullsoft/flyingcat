@@ -30,6 +30,7 @@
 #include <fcntl.h>
 
 #include "fc_log.h"
+#include "fc_string.h"
 
 #if defined(HAVE_BACKTRACE) && defined(HAVE_BACKTRACE_SYMBOLS)
 # include <execinfo.h>
