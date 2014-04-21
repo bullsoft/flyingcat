@@ -98,7 +98,7 @@ void fc_log_reopen(fc_log_t *log)
     }
 }
 
-void _log(fc_log_t *log, const char *file, int line, const char *fmt, ...)
+void _log(fc_log_t *log, const char *file, int line, int level, const char *fmt, ...)
 {
 }
 
@@ -107,7 +107,7 @@ void _log_stderr(const char *fmt, ...)
 }
 
 #if defined(HAVE_BACKTRACE) && defined(HAVE_BACKTRACE_SYMBOLS)
-void fc_log_backtrace(fc_log_t *log){
+void fc_log_backtrace(fc_log_t *log, int level){
     void  *bt_buffer[32];
     size_t bt_size, i;
     char **bt_strings;
@@ -116,7 +116,7 @@ void fc_log_backtrace(fc_log_t *log){
     bt_strings = backtrace_symbols(bt_buffer, bt_size);
 
     for (i = 0; i < bt_size; i++) {
-        fc_log(log, "%s", bt_strings[i]);
+        fc_log(log, level, "%s", bt_strings[i]);
     }
 
     free(bt_strings);

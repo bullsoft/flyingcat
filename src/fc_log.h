@@ -24,7 +24,7 @@
 #define FC_LOG_H
 
 #include "config.h"
-#include "fc_util.h" // only need __attribute__
+#include "fc_util.h"
 
 #define FC_LOG_EMERG     0
 #define FC_LOG_ALERT     1
@@ -52,7 +52,8 @@ typedef struct fc_log_s fc_log_t;
 
 #define fc_log_debug(log, level, ...) do {          \
     if ((log)->log_level >= level)                  \
-        _log(log, __FILE__, __LINE__, __VA_ARGS__); \
+        _log(log, __FILE__, __LINE__, level,        \
+             __VA_ARGS__);                          \
 } while(0)
 
 #else
@@ -64,31 +65,35 @@ typedef struct fc_log_s fc_log_t;
 #define fc_log_stderr(...)                          \
     _log_stderr(__VA_ARGS__)
 
-#define fc_log(log, ...) do {                       \
-    _log(log, __FILE__, __LINE__, __VA_ARGS__);     \
+#define fc_log(log, level, ...) do {                \
+    if ((log)->log_level >= level)                  \
+        _log(log, __FILE__, __LINE__, level,        \
+             __VA_ARGS__);                          \
 } while(0)
 
 #define fc_log_warn(log, ...) do {                  \
     if ((log)->log_level >= FC_LOG_WARN)            \
-        _log(log, __FILE__, __LINE__, __VA_ARGS__); \
+        _log(log, __FILE__, __LINE__, FC_LOG_WARN,  \
+             __VA_ARGS__);                          \
 } while(0)
  
 #define fc_log_error(log, ...) do {                 \
     if ((log)->log_level >= FC_LOG_ERROR)           \
-        _log(log, __FILE__, __LINE__, __VA_ARGS__); \
+        _log(log, __FILE__, __LINE__,FC_LOG_ERR,    \
+             __VA_ARGS__);                          \
 } while(0)
 
 #if defined(HAVE_BACKTRACE) && defined(HAVE_BACKTRACE_SYMBOLS)
-  void fc_log_backtrace(fc_log_t *log);
+  void fc_log_backtrace(fc_log_t *log, int level);
 #else
-# define fc_log_backtrace(log)
+# define fc_log_backtrace(log, level)
 #endif
 
 fc_log_t *fc_log_init(int level, const char *filename);
 void  fc_log_close(fc_log_t  *log);
 void  fc_log_reopen(fc_log_t *log);
-void _log(fc_log_t *log, const char *file, int line,
-          const char *fmt, ...) __attribute__((format(printf, 4, 5)));
+void _log(fc_log_t *log, const char *file, int line, int level,
+          const char *fmt, ...) __attribute__((format(printf, 5, 6)));
 void _log_stderr(const char *fmt, ...) __attribute((format(printf, 1, 2)));
 
 #endif
