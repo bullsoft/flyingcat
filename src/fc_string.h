@@ -28,7 +28,7 @@
 #define fc_scnprintf(buf, size, ...)          \
         _scnprintf((char *)(buf), (size_t)(size), __VA_ARGS__)
     
-#define fc_vscnprintf(str, size, fmt, args)   \
+#define fc_vscnprintf(buf, size, fmt, args)   \
         _vscnprintf((char *)(buf), (size_t)(size), fmt, args)
 
 int _scnprintf(char *buf, size_t size, const char *fmt, ...);
