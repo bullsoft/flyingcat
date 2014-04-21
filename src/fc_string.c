@@ -38,4 +38,10 @@ int _scnprintf(char *buf, size_t size, const char *fmt, ...)
 
 int _vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
 {
+    int n;
+
+    n = vsnprintf(buf, size, fmt, args);
+
+    // if error occured, n <= 0
+    return (n <= 0 ? 0 : (n < (int)size ? n : (int)(size -1)));
 }
