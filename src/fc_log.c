@@ -128,7 +128,7 @@ void _log(fc_log_t *log, const char *file, int line, int level, const char *fmt,
     len  = 0;
     size = FC_MAX_ERR_STR;
     len += fc_scnprintf(buf + len, size - len, "[%02d-%02d %02d:%02d:%02d.%ld] "
-                                               "[%*s] %s:%d ",
+                                               "[%*s] [%-12s:%-4d] ",
                         tm->tm_mon,  tm->tm_mday,
                         tm->tm_hour, tm->tm_min, tm->tm_sec,
                         tv.tv_usec,
@@ -140,6 +140,7 @@ void _log(fc_log_t *log, const char *file, int line, int level, const char *fmt,
     len += fc_vscnprintf(buf + len, size - len, fmt, args);
     va_end(args);
 
+    // we do not need '\0'
     buf[len++] = '\n';
 
     write(log->fd, buf, len);
