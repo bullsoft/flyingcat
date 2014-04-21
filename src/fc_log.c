@@ -53,6 +53,13 @@ static const char *loglevel_desc[] = {
 #define FC_LOG_MAX_LEVEL FC_LOG_VERB
 #define MAX_LEVEL_DESC_LEN  (sizeof("critical") - 1)
 
+static inline const char * basename(const char *path)
+{
+    const char *ptr = strrchr(path, '/');
+
+    return (ptr ? ptr + 1: path);
+}
+
 fc_log_t *fc_log_init(int level, const char *filename)
 {
     fc_log_t *log = (fc_log_t *)malloc(sizeof(fc_log_t));
@@ -127,7 +134,7 @@ void _log(fc_log_t *log, const char *file, int line, int level, const char *fmt,
                         tv.tv_usec,
                         MAX_LEVEL_DESC_LEN,
                         loglevel_desc[level],
-                        file, line);
+                        basename(file), line);
 
     va_start(args, fmt);
     len += fc_vscnprintf(buf + len, size - len, fmt, args);
