@@ -53,11 +53,11 @@ static const char *loglevel_desc[] = {
 #define FC_LOG_MAX_LEVEL FC_LOG_VERB
 #define MAX_LEVEL_DESC_LEN  (sizeof("critical") - 1)
 
-static inline const char * basename(const char *path)
+static inline const char *basename(const char *path)
 {
     const char *ptr = strrchr(path, '/');
 
-    return (ptr ? ptr + 1: path);
+    return (ptr ? ptr + 1 : path);
 }
 
 fc_log_t *fc_log_init(int level, const char *filename)

@@ -130,5 +130,9 @@ int main(int argc, char *argv[])
 
     fc_set_default_instance(&fc);
 
+    fc_log_t *log = fc_log_init(FC_LOG_DEBUG, "logs");
+
+    fc_log(log, FC_LOG_DEBUG, "%s", "hello");
+
     return 0;
 }
