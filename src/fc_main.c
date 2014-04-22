@@ -27,6 +27,11 @@
 #define FC_PIDFILE_PATH  "logs/fc.pid"
 #define FC_CONF_PATH     "conf/fc.conf"
 
+static int show_help;
+static int show_version;
+static int test_conf;
+static int daemonize;
+
 static int fc_daemonize(fc_log_t *log)
 {
     pid_t pid;
@@ -122,17 +127,41 @@ static void fc_set_default_instance(struct flyingcat_s *fc)
 
 static int fc_init_instance(struct flyingcat_s *fc)
 {
+
+    fc->log = fc_log_init(fc->log_level, fc->log_file);
+    if (!fc->log) {
+        return FC_ERROR;
+    }
+
+    if (daemonize && !fc_daemonize(fc->log)) {
+        return FC_ERROR;
+    }
+
+    return FC_OK;
+}
+
+static void fc_post_run(struct flyingcat_s *fc)
+{
+    if (fc->log) {
+        fc_log(fc->log, FC_LOG_INFO, "exit");
+        fc_log_close(fc->log);
+    }
 }
 
 int main(int argc, char *argv[])
 {
+    int status;
     struct flyingcat_s fc;
 
     fc_set_default_instance(&fc);
 
-    fc_log_t *log = fc_log_init(FC_LOG_DEBUG, "logs");
+    status = fc_init_instance(&fc);
+    if (status != FC_OK) {
+        fc_post_run(&fc);
+        exit(1);
+    }
 
-    fc_log(log, FC_LOG_DEBUG, "%s", "hello");
+    fc_log(fc.log, FC_LOG_INFO, "starting FlyingCat (version: " FLYINGCAT_VERSION ") ...");
 
     return 0;
 }

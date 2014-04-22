@@ -86,6 +86,10 @@ fc_log_t *fc_log_init(int level, const char *filename)
 
 void fc_log_close(fc_log_t *log)
 {
+    if (!log) {
+        return;
+    }
+
     if (log->fd > 0 && log->fd != STDERR_FILENO) {
         close(log->fd);
     }
@@ -95,7 +99,7 @@ void fc_log_close(fc_log_t *log)
 
 void fc_log_reopen(fc_log_t *log)
 {
-    if (log->fd == STDERR_FILENO) {
+    if (!log || log->fd == STDERR_FILENO) {
         return;
     }
 
@@ -117,7 +121,7 @@ void _log(fc_log_t *log, const char *file, int line, int level, const char *fmt,
     struct  timeval tv;
     struct  tm *tm;
 
-    if (log->fd < 0) {
+    if (!log || log->fd < 0) {
         return;
     }
 
