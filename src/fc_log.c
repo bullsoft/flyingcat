@@ -156,6 +156,16 @@ void _log(fc_log_t *log, const char *file, int line, int level, const char *fmt,
 
 void _log_stderr(const char *fmt, ...)
 {
+    int     len;
+    char    buf[FC_MAX_ERR_STR];
+    va_list args;
+
+    va_start(args, fmt);
+    len = fc_vscnprintf(buf, FC_MAX_ERR_STR, fmt, args);
+    va_end(args);
+
+    buf[len++] = '\n';
+    write(STDERR_FILENO, buf, len);
 }
 
 #if defined(HAVE_BACKTRACE) && defined(HAVE_BACKTRACE_SYMBOLS)
