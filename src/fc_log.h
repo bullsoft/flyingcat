@@ -41,9 +41,10 @@
 #define FC_MAX_ERR_STR   1024
 
 struct fc_log_s {
-    int   log_level;
-    char *file;
-    int   fd;
+    int    log_level;
+    char  *file;
+    int    fd;
+    size_t nerr;
 };
 
 typedef struct fc_log_s fc_log_t;

@@ -69,6 +69,7 @@ fc_log_t *fc_log_init(int level, const char *filename)
 
     log->log_level = max(FC_LOG_VERB, min(FC_LOG_EMERG, level));
     log->file = (char *)filename;
+    log->nerr = 0;
     if (!filename || !strlen(filename)) {
         log->fd = STDERR_FILENO;
         return log;
@@ -143,7 +144,9 @@ void _log(fc_log_t *log, const char *file, int line, int level, const char *fmt,
     // we do not need '\0'
     buf[len++] = '\n';
 
-    write(log->fd, buf, len);
+    if (write(log->fd, buf, len) < 0) {
+        log->nerr ++;
+    }
     errno = errno_save;
 }
 
