@@ -86,7 +86,7 @@ typedef struct fc_log_s fc_log_t;
 
 #define fc_abort(log, ...) do {                     \
     if ((log)->log_level >= FC_LOG_EMERG)           \
-        _log(log, __FILE__, __LINE__, level,        \
+        _log(log, __FILE__, __LINE__, FC_LOG_EMERG, \
              __VA_ARGS__);                          \
     fc_log_backtrace(log, FC_LOG_EMERG);            \
     abort();                                        \
