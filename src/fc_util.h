@@ -37,4 +37,7 @@
 #define min(a, b) ((a) < (b) ? (a) : (b))
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
+#define FC_INT32_LEN   (sizeof("-2147483648") - 1)
+#define FC_INT64_LEN   (sizeof("-9223372036854775808") - 1)
+
 #endif

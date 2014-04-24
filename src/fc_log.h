@@ -84,6 +84,14 @@ typedef struct fc_log_s fc_log_t;
              __VA_ARGS__);                          \
 } while(0)
 
+#define fc_abort(log, ...) do {                     \
+    if ((log)->log_level >= FC_LOG_EMERG)           \
+        _log(log, __FILE__, __LINE__, level,        \
+             __VA_ARGS__);                          \
+    fc_log_backtrace(log, FC_LOG_EMERG);            \
+    abort();                                        \
+} while(0)
+
 #if defined(HAVE_BACKTRACE) && defined(HAVE_BACKTRACE_SYMBOLS)
   void fc_log_backtrace(fc_log_t *log, int level);
 #else
