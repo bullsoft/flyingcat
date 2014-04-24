@@ -60,7 +60,7 @@ static inline const char *basename(const char *path)
     return (ptr ? ptr + 1 : path);
 }
 
-fc_log_t *fc_log_init(int level, const char *filename)
+fc_log_t *fc_log_create(int level, const char *filename)
 {
     fc_log_t *log = (fc_log_t *)malloc(sizeof(fc_log_t));
     if (log == NULL) {

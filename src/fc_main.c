@@ -128,7 +128,7 @@ static void fc_set_default_instance(struct flyingcat_s *fc)
 static int fc_init_instance(struct flyingcat_s *fc)
 {
 
-    fc->log = fc_log_init(fc->log_level, fc->log_file);
+    fc->log = fc_log_create(fc->log_level, fc->log_file);
     if (!fc->log) {
         return FC_ERROR;
     }

@@ -90,7 +90,7 @@ typedef struct fc_log_s fc_log_t;
 # define fc_log_backtrace(log, level)
 #endif
 
-fc_log_t *fc_log_init(int level, const char *filename);
+fc_log_t *fc_log_create(int level, const char *filename);
 void  fc_log_close(fc_log_t  *log);
 void  fc_log_reopen(fc_log_t *log);
 void _log(fc_log_t *log, const char *file, int line, int level,
