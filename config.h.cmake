@@ -7,5 +7,7 @@
 
 #cmakedefine HAVE_BACKTRACE
 #cmakedefine HAVE_BACKTRACE_SYMBOLS
+#cmakedefine HAVE_POSIX_MEMALIGN
+#cmakedefine HAVE_MEMALIGN
 
 #endif

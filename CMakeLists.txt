@@ -28,6 +28,8 @@ include(CheckIncludeFiles)
 include(CheckFunctionExists)
 check_function_exists(backtrace HAVE_BACKTRACE)
 check_function_exists(backtrace_symbols HAVE_BACKTRACE_SYMBOLS)
+check_function_exists(posix_memalign HAVE_POSIX_MEMALIGN)
+check_function_exists(memalign HAVE_MEMALIGN)
 
 include_directories(${LIBPHENOM_PATH}/include
                     ${CMAKE_CURRENT_BINARY_DIR}

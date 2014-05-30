@@ -41,3 +41,23 @@ void *fc_calloc(size_t size, fc_log_t *log)
     return (p != NULL ? memset(p, 0, size) : p);
 }
 
+#if defined(HAVE_POSIX_MEMALIGN) || defined(HAVE_MEMALIGN)
+void *fc_memalign(size_t alignment, size_t size, fc_log_t *log)
+{
+    void *p = NULL;
+
+#ifdef HAVE_POSIX_MEMALIGN
+    if (posix_memalign(&p, alignment, size) != 0) {
+#else
+    p = memalign(alignment, size);
+    if (p == NULL) {
+#endif
+        fc_log_error(log, "memalign(%zu, %zu) failed", alignment, size);
+    }
+
+    fc_log_debug(log, FC_LOG_DEBUG,
+                 "memalign: %zu at: %p with: %zu", size, p, alignment);
+    return p;
+}
+#endif
+

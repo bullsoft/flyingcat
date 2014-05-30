@@ -30,4 +30,10 @@ void *fc_calloc(size_t size, fc_log_t *log);
 
 #define fc_free free
 
+#if defined(HAVE_POSIX_MEMALIGN) || defined(HAVE_MEMALIGN)
+  void *fc_memalign(size_t alignment, size_t size, fc_log_t *log);
+#else
+# define fc_memalign(_alignment, _size, _log) fc_alloc(_size, _log)
+#endif
+
 #endif
