@@ -28,4 +28,6 @@
 void *fc_alloc (size_t size, fc_log_t *log);
 void *fc_calloc(size_t size, fc_log_t *log);
 
+#define fc_free free
+
 #endif

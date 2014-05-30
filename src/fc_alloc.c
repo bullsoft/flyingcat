@@ -36,6 +36,8 @@ void *fc_alloc(size_t size, fc_log_t *log)
 
 void *fc_calloc(size_t size, fc_log_t *log)
 {
-    return NULL;
+    void *p = fc_alloc(size, log);
+
+    return (p != NULL ? memset(p, 0, size) : p);
 }
 
