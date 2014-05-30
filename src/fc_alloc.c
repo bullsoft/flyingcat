@@ -22,12 +22,19 @@
 
 #include "fc_alloc.h"
 
-void *fc_alloc(size_t size)
+void *fc_alloc(size_t size, fc_log_t *log)
 {
-    return NULL;
+    void *p = malloc(size);
+
+    if (p == NULL) {
+        fc_log_error(log, "malloc(%zu) failed", size);
+    }
+
+    fc_log_debug(log, FC_LOG_DEBUG, "malloc: %zu at: %p", size, p);
+    return p;
 }
 
-void *fc_calloc(size_t size)
+void *fc_calloc(size_t size, fc_log_t *log)
 {
     return NULL;
 }
