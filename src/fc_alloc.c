@@ -20,12 +20,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef FC_ALLOC_H
-#define FC_ALLOC_H
+#include "fc_alloc.h"
 
-#include "fc_core.h"
+void *fc_alloc(size_t size)
+{
+    return NULL;
+}
 
-void *fc_alloc(size_t size);
-void *fc_calloc(size_t size);
+void *fc_calloc(size_t size)
+{
+    return NULL;
+}
 
-#endif
