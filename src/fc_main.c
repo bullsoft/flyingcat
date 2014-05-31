@@ -133,7 +133,7 @@ static int fc_init_instance(struct flyingcat_s *fc)
         return FC_ERROR;
     }
 
-    if (daemonize && !fc_daemonize(fc->log)) {
+    if (daemonize && fc_daemonize(fc->log) != FC_OK) {
         return FC_ERROR;
     }
 
