@@ -26,7 +26,7 @@ fc_pool_t *fc_pool_create(size_t size, fc_log_t *log)
 {
     fc_pool_t *p;
 
-    p = fc_alloc(size + sizeof(fc_pool_t), log);
+    p = fc_memalign(FC_POOL_ALIGNMENT, size + sizeof(fc_pool_t), log);
     if (p != NULL) {
         p->d.last  = (u_char *)p + sizeof(fc_pool_t);
         p->d.end   = p->d.last + size;
@@ -41,12 +41,17 @@ fc_pool_t *fc_pool_create(size_t size, fc_log_t *log)
 
 void *fc_palloc(fc_pool_t *pool, size_t size)
 {
+    if (size > pool->max)
+        return fc_pmemalign(pool, size, FC_POOL_ALIGNMENT);
+
     return NULL;
 }
 
 void *fc_pcalloc(fc_pool_t *pool, size_t size)
 {
-    return NULL;
+    void *p = fc_palloc(pool, size);
+
+    return (p != NULL ? memset(p, 0, size) : p);
 }
 
 void *fc_pmemalign(fc_pool_t *pool, size_t size, size_t alignment)
@@ -61,6 +66,9 @@ void fc_pfree(fc_pool_t *pool, void *ptr)
     for (l = pool->large; l != NULL; l = l->next) {
         if (l->data != ptr)
             continue;
+
+        fc_log_debug(pool->log, FC_LOG_DEBUG,
+                     "free: %p", l->data);
         fc_free(l->data);
         l->data = NULL;
         return;
@@ -75,11 +83,20 @@ void fc_pool_close(fc_pool_t *pool)
     for (l = pool->large; l != NULL; l = l->next) {
         if (l->data == NULL)
             continue;
+
+        fc_log_debug(pool->log, FC_LOG_DEBUG,
+                     "free: %p", l->data);
         fc_free(l->data);
     }
 
     for (; pool != NULL; pool = tmp) {
         tmp = pool->next;
+
+        // because pool->log will not be allocated
+        // in the pool.
+        fc_log_debug(pool->log, FC_LOG_DEBUG,
+                     "free pool: %p, unused: %zu", pool,
+                     pool->d.end - pool->d.last);
         fc_free(pool);
     }
 }

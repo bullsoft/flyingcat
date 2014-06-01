@@ -25,6 +25,10 @@
 
 #include "fc_core.h"
 
+#define FC_DEFAULT_POOL_SIZE (16 * 1024)
+
+#define FC_POOL_ALIGNMENT     16
+
 struct fc_pool_data_s {
     u_char *last;
     u_char *end;

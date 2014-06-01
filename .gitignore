@@ -27,3 +27,6 @@ build/
 
 # ctags
 tags
+
+test
+test.c
