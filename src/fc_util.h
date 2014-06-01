@@ -40,4 +40,12 @@
 #define FC_INT32_LEN   (sizeof("-2147483648") - 1)
 #define FC_INT64_LEN   (sizeof("-9223372036854775808") - 1)
 
+#ifndef FC_ALIGNMENT
+#define FC_ALIGNMENT    sizeof(unsigned long)
+#endif
+
+#define fc_align(d, a)    (((d) + (a - 1)) & ~(a - 1))
+#define fc_align_ptr(p, a) \
+    (u_char *) (((uintptr_t) (p) + ((uintptr_t) a - 1)) & ~((uintptr_t) a - 1))
+
 #endif

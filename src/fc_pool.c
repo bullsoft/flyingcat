@@ -22,6 +22,9 @@
 
 #include "fc_pool.h"
 
+static void *fc_palloc_large(fc_pool_t *pool, size_t size);
+static void *fc_palloc_block(fc_pool_t *pool, size_t size);
+
 fc_pool_t *fc_pool_create(size_t size, fc_log_t *log)
 {
     fc_pool_t *p;
@@ -41,9 +44,33 @@ fc_pool_t *fc_pool_create(size_t size, fc_log_t *log)
 
 void *fc_palloc(fc_pool_t *pool, size_t size)
 {
-    if (size > pool->max)
-        return fc_pmemalign(pool, size, FC_POOL_ALIGNMENT);
+    u_char *m;
 
+    if (size > pool->max)
+        return fc_palloc_large(pool, size);
+
+    pool = pool->current;
+    do {
+        m = fc_align_ptr(pool->d.last, FC_ALIGNMENT);
+
+        if ((size_t)(pool->d.end - m) >= size) {
+            pool->d.last = m + size;
+            return m;
+        }
+
+        pool = pool->next;
+    } while(pool);
+
+    return fc_palloc_block(pool, size);
+}
+
+static void *fc_palloc_large(fc_pool_t *pool, size_t size)
+{
+    return NULL;
+}
+
+static void *fc_palloc_block(fc_pool_t *pool, size_t size)
+{
     return NULL;
 }
 
