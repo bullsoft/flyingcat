@@ -66,7 +66,41 @@ void *fc_palloc(fc_pool_t *pool, size_t size)
 
 static void *fc_palloc_large(fc_pool_t *pool, size_t size)
 {
-    return NULL;
+    void *p;
+    int   n;
+    u_char found = 0;
+    struct fc_large_data_s *l = NULL;
+
+    n = 0;
+    for(l = pool->large; l; l = l->next) {
+        if (l->data == NULL) {
+            found = 1;
+            break;
+        }
+
+        if (n++ >= 4) {
+            break;
+        }
+    }
+    if (!found) {
+        l = fc_palloc(pool, sizeof(struct fc_large_data_s));
+    }
+    if (l == NULL) {
+        return NULL;
+    }
+
+    // allocate for requested `size` memory
+    p = fc_alloc(size, pool->log);
+    if (p == NULL) {
+        return NULL;
+    }
+    l->data = p;
+    if (!found) {
+        l->next     = pool->large;
+        pool->large = l;
+    }
+
+    return p;
 }
 
 static void *fc_palloc_block(fc_pool_t *pool, size_t size)
