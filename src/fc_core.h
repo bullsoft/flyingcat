@@ -35,13 +35,15 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "fc_log.h"
-#include "fc_util.h"
-#include "fc_signal.h"
-
 typedef intptr_t     fc_int_t;
 typedef uintptr_t    fc_uint_t;
 typedef intptr_t     fc_flag_t;
+
+#include "fc_log.h"
+#include "fc_util.h"
+#include "fc_signal.h"
+#include "fc_alloc.h"
+#include "fc_pool.h"
 
 struct flyingcat_s {
     int   log_level;

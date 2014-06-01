@@ -44,5 +44,6 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
+add_definitions(-Wall)
 add_subdirectory(src)
 

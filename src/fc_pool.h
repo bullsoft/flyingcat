@@ -23,4 +23,35 @@
 #ifndef FC_POOL_H
 #define FC_POOL_H
 
+#include "fc_core.h"
+
+struct fc_pool_data_s {
+    u_char *last;
+    u_char *end;
+    fc_uint_t failed;
+};
+
+struct fc_pool_s {
+    struct fc_pool_data_s d;
+    size_t max;
+    struct fc_pool_s *current;
+    struct fc_pool_s *next;
+    struct fc_large_data_s *large;
+    fc_log_t *log;
+};
+
+struct fc_large_data_s {
+    void *data;
+    struct fc_large_data_s *next;
+};
+
+typedef struct fc_pool_s fc_pool_t;
+
+fc_pool_t *fc_pool_create(size_t size, fc_log_t *log);
+void *fc_palloc(fc_pool_t *pool, size_t size);
+void *fc_pcalloc(fc_pool_t *pool, size_t size);
+void *fc_pmemalign(fc_pool_t *pool, size_t size, size_t alignment);
+void  fc_pfree(fc_pool_t *pool, void *ptr);
+void  fc_pool_close(fc_pool_t *pool);
+
 #endif
