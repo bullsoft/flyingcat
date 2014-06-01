@@ -32,14 +32,14 @@
 struct fc_pool_data_s {
     u_char *last;
     u_char *end;
-    fc_uint_t failed;
+    fc_uint_t fails;
+    struct fc_pool_s *next;
 };
 
 struct fc_pool_s {
     struct fc_pool_data_s d;
     size_t max;
     struct fc_pool_s *current;
-    struct fc_pool_s *next;
     struct fc_large_data_s *large;
     fc_log_t *log;
 };

@@ -33,9 +33,10 @@ fc_pool_t *fc_pool_create(size_t size, fc_log_t *log)
     if (p != NULL) {
         p->d.last  = (u_char *)p + sizeof(fc_pool_t);
         p->d.end   = p->d.last + size;
+        p->d.fails = 0;
+        p->d.next  = NULL;
         p->max     = size;
         p->current = p;
-        p->next    = NULL;
         p->large   = NULL;
         p->log     = log;
     }
@@ -45,21 +46,22 @@ fc_pool_t *fc_pool_create(size_t size, fc_log_t *log)
 void *fc_palloc(fc_pool_t *pool, size_t size)
 {
     u_char *m;
+    fc_pool_t *p;
 
     if (size > pool->max)
         return fc_palloc_large(pool, size);
 
-    pool = pool->current;
+    p = pool->current;
     do {
-        m = fc_align_ptr(pool->d.last, FC_ALIGNMENT);
+        m = fc_align_ptr(p->d.last, FC_ALIGNMENT);
 
-        if ((size_t)(pool->d.end - m) >= size) {
-            pool->d.last = m + size;
+        if ((size_t)(p->d.end - m) >= size) {
+            p->d.last = m + size;
             return m;
         }
 
-        pool = pool->next;
-    } while(pool);
+        p = p->d.next;
+    } while(p);
 
     return fc_palloc_block(pool, size);
 }
@@ -105,7 +107,34 @@ static void *fc_palloc_large(fc_pool_t *pool, size_t size)
 
 static void *fc_palloc_block(fc_pool_t *pool, size_t size)
 {
-    return NULL;
+    u_char *m;
+    fc_pool_t *p, *q, *cur;
+
+    p = fc_memalign(FC_POOL_ALIGNMENT,
+                    pool->max + sizeof(struct fc_pool_data_s), pool->log);
+    if (p == NULL) {
+        return NULL;
+    }
+
+    p->d.last  = (u_char *)p + sizeof(struct fc_pool_data_s);
+    p->d.end   = p->d.last + pool->max;
+    p->d.fails = 0;
+    p->d.next  = NULL;
+
+    m = fc_align_ptr(pool->d.last, FC_ALIGNMENT);
+    p->d.last  = m + size;
+
+    cur = pool->current;
+    for (q = cur; q->d.next != NULL; q = q->d.next) {
+        if (q->d.fails ++ >= 4) {
+            cur = q->d.next;
+        }
+    }
+
+    q->d.next = p;
+    pool->current = cur ? cur : p;
+
+    return m;
 }
 
 void *fc_pcalloc(fc_pool_t *pool, size_t size)
@@ -151,7 +180,7 @@ void fc_pool_close(fc_pool_t *pool)
     }
 
     for (; pool != NULL; pool = tmp) {
-        tmp = pool->next;
+        tmp = pool->d.next;
 
         // because pool->log will not be allocated
         // in the pool.
