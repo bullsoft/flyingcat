@@ -146,7 +146,24 @@ void *fc_pcalloc(fc_pool_t *pool, size_t size)
 
 void *fc_pmemalign(fc_pool_t *pool, size_t size, size_t alignment)
 {
-    return NULL;
+    void *p;
+    struct fc_large_data_s *l;
+
+    p = fc_memalign(alignment, size, pool->log);
+    if (p == NULL) {
+        return NULL;
+    }
+
+    l = fc_palloc(pool, sizeof(struct fc_large_data_s));
+    if (l == NULL) {
+        fc_free(p);
+        return NULL;
+    }
+    l->data = p;
+    l->next = pool->large;
+    pool->large = l;
+
+    return p;
 }
 
 void fc_pfree(fc_pool_t *pool, void *ptr)
