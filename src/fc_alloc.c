@@ -52,7 +52,11 @@ void *fc_memalign(size_t alignment, size_t size, fc_log_t *log)
     p = memalign(alignment, size);
     if (p == NULL) {
 #endif
-        fc_log_error(log, "memalign(%zu, %zu) failed", alignment, size);
+        fc_log_error(log,
+#ifdef HAVE_POSIX_MEMALIGN
+        "posix_"
+#endif
+        "memalign(%zu, %zu) failed", alignment, size);
     }
 
     fc_log_debug(log, FC_LOG_DEBUG,
