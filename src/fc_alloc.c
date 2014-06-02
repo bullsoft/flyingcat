@@ -54,13 +54,16 @@ void *fc_memalign(size_t alignment, size_t size, fc_log_t *log)
 #endif
         fc_log_error(log,
 #ifdef HAVE_POSIX_MEMALIGN
-        "posix_"
+            "posix_"
 #endif
-        "memalign(%zu, %zu) failed", alignment, size);
+            "memalign(%zu, %zu) failed", alignment, size);
     }
 
     fc_log_debug(log, FC_LOG_DEBUG,
-                 "memalign: %zu at: %p with: %zu", size, p, alignment);
+#ifdef HAVE_POSIX_MEMALIGN
+        "posix_"
+#endif
+        "memalign: %zu at: %p with: %zu", size, p, alignment);
     return p;
 }
 #endif
