@@ -134,7 +134,7 @@ static void fc_print_sysinfo(struct flyingcat_s *fc)
 {
     struct utsname uts;
 
-    fc_log(fc->log, FC_LOG_INFO, "flyintcat version: " FLYINGCAT_VERSION);
+    fc_log(fc->log, FC_LOG_INFO, "flyingcat version: " FLYINGCAT_VERSION);
 
     if (uname(&uts) < 0) {
         return;
