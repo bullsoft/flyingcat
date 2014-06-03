@@ -22,6 +22,8 @@
 
 #include "fc_alloc.h"
 
+#include <malloc.h>
+
 void *fc_alloc(size_t size, fc_log_t *log)
 {
     void *p = malloc(size);
