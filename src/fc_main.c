@@ -139,7 +139,8 @@ static void fc_print_sysinfo(struct flyingcat_s *fc)
     if (uname(&uts) < 0) {
         return;
     }
-    fc_log(fc->log, FC_LOG_INFO, "OS: %s %s", uts.sysname, uts.release);
+    fc_log(fc->log, FC_LOG_INFO, "OS: %s %s %s", uts.sysname,
+           uts.release, uts.machine);
 }
 
 static int fc_init_instance(struct flyingcat_s *fc)
