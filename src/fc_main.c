@@ -20,6 +20,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <getopt.h>
+#include <sys/utsname.h>
+
 #include "fc_core.h"
 
 #define FC_LOG_DEFAULT   FC_LOG_INFO
@@ -77,7 +80,8 @@ static int fc_redirect_io(struct flyingcat_s *fc)
 
     fd = open(fc->log_file, O_RDWR);
     if (fd < 0) {
-        fc_log_error(fc->log, "open(\"%s\") failed: %s", fc->log_file, strerror(errno));
+        fc_log_error(fc->log, "open(\"%s\") failed: %s",
+                     fc->log_file, strerror(errno));
         return FC_ERROR;
     }
 
@@ -97,7 +101,8 @@ static int fc_redirect_io(struct flyingcat_s *fc)
     }
 
     if (close(fd) == -1) {
-        fc_log_error(fc->log, "close(\"%s\") failed: %s", fc->log_file, strerror(errno));
+        fc_log_error(fc->log, "close(\"%s\") failed: %s",
+                     fc->log_file, strerror(errno));
         return FC_ERROR;
     }
     return FC_OK;
@@ -125,6 +130,18 @@ static void fc_set_default_instance(struct flyingcat_s *fc)
     fc->pid_file = FC_PIDFILE_PATH;
 }
 
+static void fc_print_sysinfo(struct flyingcat_s *fc)
+{
+    struct utsname uts;
+
+    fc_log(fc->log, FC_LOG_INFO, "flyintcat version: " FLYINGCAT_VERSION);
+
+    if (uname(&uts) < 0) {
+        return;
+    }
+    fc_log(fc->log, FC_LOG_INFO, "OS: %s %s", uts.sysname, uts.release);
+}
+
 static int fc_init_instance(struct flyingcat_s *fc)
 {
 
@@ -137,6 +154,9 @@ static int fc_init_instance(struct flyingcat_s *fc)
         return FC_ERROR;
     }
 
+    fc->pid = getpid();
+
+    fc_print_sysinfo(fc);
     return FC_OK;
 }
 
@@ -160,8 +180,6 @@ int main(int argc, char *argv[])
         fc_post_run(&fc);
         exit(1);
     }
-
-    fc_log(fc.log, FC_LOG_INFO, "starting FlyingCat (version: " FLYINGCAT_VERSION ") ...");
 
     return 0;
 }
