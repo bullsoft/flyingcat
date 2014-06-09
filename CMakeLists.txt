@@ -19,6 +19,7 @@ if (CMAKE_BUILD_TYPE)
 endif (CMAKE_BUILD_TYPE)
 if (BUILD_TYPE STREQUAL "DEBUG" OR DEBUG_LOG)
     set(FC_DEBUG_LOG TRUE)
+    add_definitions(-Wall)
 endif (BUILD_TYPE STREQUAL "DEBUG" OR DEBUG_LOG)
 
 # check header files
@@ -30,6 +31,7 @@ check_function_exists(backtrace HAVE_BACKTRACE)
 check_function_exists(backtrace_symbols HAVE_BACKTRACE_SYMBOLS)
 check_function_exists(posix_memalign HAVE_POSIX_MEMALIGN)
 check_function_exists(memalign HAVE_MEMALIGN)
+check_function_exists(getopt_long HAVE_GETOPT_LONG)
 
 include_directories(${LIBPHENOM_PATH}/include
                     ${CMAKE_CURRENT_BINARY_DIR}
@@ -42,8 +44,11 @@ link_directories(${LIBPHENOM_PATH}/lib)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 #set(CMAKE_INSTALL_RPATH "${LIBPHENOM_PATH}/lib")
 
+if (CMAKE_COMPILER_IS_GNUCC)
+    add_definitions(-D_GNU_SOURCE)
+endif (CMAKE_COMPILER_IS_GNUCC)
+
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-add_definitions(-Wall)
 add_subdirectory(src)
 

@@ -35,6 +35,115 @@ static int show_version;
 static int test_conf;
 static int daemonize;
 
+static struct option long_options[] = {
+    { "help",           no_argument,        NULL,   'h' },
+    { "version",        no_argument,        NULL,   'V' },
+    { "test-conf",      no_argument,        NULL,   't' },
+    { "not-daemonize",  no_argument,        NULL,   'D' },
+    { "prefix",         required_argument,  NULL,   'P' },
+    { "verbose",        required_argument,  NULL,   'v' },
+    { "conf-file",      required_argument,  NULL,   'c' },
+    { "log-file",       required_argument,  NULL,   'l' },
+    { "pid-file",       required_argument,  NULL,   'p' },
+    { NULL,             0,                  NULL,    0  }
+};
+
+static char short_options[] = "hVtDP:v:c:l:p:";
+
+static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
+{
+    int c, value;
+
+    opterr = 0;
+
+    // default it is a daemon
+    daemonize = 1;
+
+    for (;;) {
+        c = getopt_long(argc, argv, short_options, long_options, NULL);
+        if (c == -1) {
+            break;
+        }
+
+        switch (c) {
+        case 'h':
+            show_help    = 1;
+            break;
+
+        case 'V':
+            show_version = 1;
+            break;
+
+        case 't':
+            test_conf = 1;
+            break;
+
+        case 'D':
+            daemonize = 0;
+            break;
+
+        case 'P':
+            fc->prefix = optarg;
+            break;
+
+        case 'v':
+            value = atoi(optarg);
+            if (value < 0) {
+                fc_log_stderr(FLYINGCAT_NAME ": option -v requires a number");
+                return FC_ERROR;
+            }
+            fc->log_level = value;
+            break;
+
+        case 'c':
+            fc->conf_file = optarg;
+            break;
+
+        case 'l':
+            fc->log_file  = optarg;
+            break;
+
+        case 'p':
+            fc->pid_file  = optarg;
+            break;
+
+        case '?':
+            switch (optopt) {
+            case 'P':
+                fc_log_stderr(FLYINGCAT_NAME ": option -%c requires a directory name",
+                           optopt);
+                break;
+
+            case 'c':
+            case 'l':
+            case 'p':
+                fc_log_stderr(FLYINGCAT_NAME ": option -%c requires a file name",
+                           optopt);
+                break;
+
+            case 'v':
+                fc_log_stderr(FLYINGCAT_NAME ": option -%c requires a number", optopt);
+                break;
+
+            default:
+                fc_log_stderr(FLYINGCAT_NAME ": invalid option '-%c'", optopt);
+                break;
+            }
+            return FC_ERROR;
+
+        default:
+            fc_log_stderr(FLYINGCAT_NAME ": invalid option '-%c'", optopt);
+            return FC_ERROR;
+        }
+    }
+
+    return FC_OK;
+}
+
+static void fc_show_usage()
+{
+}
+
 static int fc_daemonize(fc_log_t *log)
 {
     pid_t pid;
@@ -115,6 +224,7 @@ DUP2FAILED:
 
 static void fc_set_default_instance(struct flyingcat_s *fc)
 {
+    fc->prefix    = FC_INSTALL_PREFIX;
     fc->log_level = FC_LOG_DEFAULT;
     fc->log_file  = FC_LOG_PATH;
 
@@ -145,7 +255,6 @@ static void fc_print_sysinfo(struct flyingcat_s *fc)
 
 static int fc_init_instance(struct flyingcat_s *fc)
 {
-
     fc->log = fc_log_create(fc->log_level, fc->log_file);
     if (!fc->log) {
         return FC_ERROR;
@@ -175,6 +284,11 @@ int main(int argc, char *argv[])
     struct flyingcat_s fc;
 
     fc_set_default_instance(&fc);
+
+    if (fc_get_options(argc, argv, &fc) != FC_OK) {
+        fc_show_usage();
+        exit(1);
+    }
 
     status = fc_init_instance(&fc);
     if (status != FC_OK) {

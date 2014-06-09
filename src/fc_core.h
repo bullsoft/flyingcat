@@ -47,6 +47,7 @@ typedef intptr_t     fc_flag_t;
 
 struct flyingcat_s {
     int   log_level;
+    char *prefix;
     char *log_file;
     char *conf_file;
     pid_t pid;
