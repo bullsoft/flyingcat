@@ -45,6 +45,7 @@
 #endif
 
 #define FC_PATHSEP      '/'
+#define FC_LINEFEED     "\n"
 
 #define fc_align(d, a)    (((d) + (a - 1)) & ~(a - 1))
 #define fc_align_ptr(p, a) \

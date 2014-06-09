@@ -28,15 +28,15 @@
 #define FC_LOG_DEFAULT   FC_LOG_INFO
 
 #ifndef FC_LOG_PATH
-# define FC_LOG_PATH      "logs/fc.log"
+# define FC_LOG_PATH     "logs/fc.log"
 #endif
 
 #ifndef FC_PID_PATH
-# define FC_PID_PATH      "logs/fc.pid"
+# define FC_PID_PATH     "logs/fc.pid"
 #endif
 
 #ifndef FC_CONF_PATH
-# define FC_CONF_PATH     "conf/fc.conf"
+# define FC_CONF_PATH    "conf/fc.conf"
 #endif
 
 static int show_help;
@@ -76,6 +76,7 @@ static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
 
         switch (c) {
         case 'h':
+            show_version = 1;
             show_help    = 1;
             break;
 
@@ -157,6 +158,28 @@ static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
 
 static void fc_show_usage()
 {
+    fc_log_stderr(
+        "Usage: " FLYINGCAT_NAME " [-hVtD] [-P prefix] [-v log_level] "
+                  "[-l log_file] [-p pid_file]" FC_LINEFEED
+    );
+    fc_log_stderr(
+        "Options:" FC_LINEFEED
+        "  -h, --help              : this help" FC_LINEFEED
+        "  -V, --version           : show version and exit" FC_LINEFEED
+        "  -t, --test-conf         : test configuration and exit" FC_LINEFEED
+        "  -D, --not-daemonize     : do not daemonize" FC_LINEFEED
+        "  -P, --prefix            : set prefix path (default: "
+                                     FC_INSTALL_PREFIX ")" FC_LINEFEED
+        "  -v, --verbose           : set log level (default: %d, min: %d, max: %d)"
+                                     FC_LINEFEED
+        "  -c, --conf-file         : set configuration file (default: "
+                                     FC_CONF_PATH ")" FC_LINEFEED
+        "  -l, --log-file          : set log file (default: "
+                                     FC_LOG_PATH ")" FC_LINEFEED
+        "  -p, --pid-file          : set pid file (default: "
+                                     FC_PID_PATH ")"
+        , FC_LOG_DEFAULT, FC_LOG_EMERG, FC_LOG_VERB
+    );
 }
 
 static int fc_daemonize(fc_log_t *log)
@@ -352,6 +375,14 @@ int main(int argc, char *argv[])
     if (fc_get_options(argc, argv, &fc) != FC_OK) {
         fc_show_usage();
         exit(1);
+    }
+
+    if (show_version) {
+        fc_log_stderr(FLYINGCAT_NAME ": " FLYINGCAT_VERSION);
+        if (show_help) {
+            fc_show_usage();
+        }
+        exit(0);
     }
 
     status = fc_init_instance(&fc);
