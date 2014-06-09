@@ -53,6 +53,10 @@ struct flyingcat_s {
     pid_t pid;
     char *pid_file;
 
+    unsigned int log_file_alloc:1;
+    unsigned int conf_file_alloc:1;
+    unsigned int pid_file_alloc:1;
+
     char hostname[FC_MAXHOSTNAMELEN];
     fc_log_t *log;
 };

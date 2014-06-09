@@ -44,6 +44,8 @@
 #define FC_ALIGNMENT    sizeof(unsigned long)
 #endif
 
+#define FC_PATHSEP      '/'
+
 #define fc_align(d, a)    (((d) + (a - 1)) & ~(a - 1))
 #define fc_align_ptr(p, a) \
     (u_char *) (((uintptr_t) (p) + ((uintptr_t) a - 1)) & ~((uintptr_t) a - 1))

@@ -26,9 +26,18 @@
 #include "fc_core.h"
 
 #define FC_LOG_DEFAULT   FC_LOG_INFO
-#define FC_LOG_PATH      "logs/fc.log"
-#define FC_PIDFILE_PATH  "logs/fc.pid"
-#define FC_CONF_PATH     "conf/fc.conf"
+
+#ifndef FC_LOG_PATH
+# define FC_LOG_PATH      "logs/fc.log"
+#endif
+
+#ifndef FC_PID_PATH
+# define FC_PID_PATH      "logs/fc.pid"
+#endif
+
+#ifndef FC_CONF_PATH
+# define FC_CONF_PATH     "conf/fc.conf"
+#endif
 
 static int show_help;
 static int show_version;
@@ -243,7 +252,11 @@ static void fc_set_default_instance(struct flyingcat_s *fc)
     fc->hostname[FC_MAXHOSTNAMELEN - 1] = '\0';
 
     fc->pid      = (pid_t)-1;
-    fc->pid_file = FC_PIDFILE_PATH;
+    fc->pid_file = FC_PID_PATH;
+
+    fc->log_file_alloc  = 0;
+    fc->conf_file_alloc = 0;
+    fc->pid_file_alloc  = 0;
 }
 
 static void fc_print_sysinfo(struct flyingcat_s *fc)
@@ -259,8 +272,37 @@ static void fc_print_sysinfo(struct flyingcat_s *fc)
            uts.release, uts.machine);
 }
 
+#define FC_MEMBER_ALLOC(_member) _member ## _alloc
+
+#define FC_STRCAT_IF_REALATIVE(_instance, _member, _path)  \
+do {                                                       \
+    if (_instance->_member[0] != FC_PATHSEP) {             \
+        plen = strlen(fc->prefix);                         \
+        pathlen = strlen(_path);                           \
+        name = malloc(plen + pathlen + 2);                 \
+        if (name == NULL) {                                \
+            return FC_ERROR;                               \
+        }                                                  \
+        p = memcpy(name, fc->prefix, plen);                \
+        p += plen;                                         \
+        if (*(p - 1) != FC_PATHSEP) {                      \
+            *p++ = FC_PATHSEP;                             \
+        }                                                  \
+        memcpy(p, _path, strlen(_path) + 1);               \
+        _instance->_member = name;                         \
+        _instance->FC_MEMBER_ALLOC(_member) = 1;           \
+    }                                                      \
+} while(0)
+
 static int fc_init_instance(struct flyingcat_s *fc)
 {
+    char *p, *name;
+    size_t plen, pathlen;
+
+    FC_STRCAT_IF_REALATIVE(fc, log_file,  fc->log_file);
+    FC_STRCAT_IF_REALATIVE(fc, conf_file, fc->conf_file);
+    FC_STRCAT_IF_REALATIVE(fc, pid_file,  fc->pid_file);
+
     fc->log = fc_log_create(fc->log_level, fc->log_file);
     if (!fc->log) {
         return FC_ERROR;
@@ -270,11 +312,23 @@ static int fc_init_instance(struct flyingcat_s *fc)
         return FC_ERROR;
     }
 
+    if (daemonize && fc_redirect_io(fc) != FC_OK) {
+        return FC_ERROR;
+    }
+
     fc->pid = getpid();
 
     fc_print_sysinfo(fc);
     return FC_OK;
 }
+
+#define FC_FREE_IF_ALLOC(_instance, _member)    \
+do {                                            \
+    if (_instance->FC_MEMBER_ALLOC(_member)) {  \
+        free(_instance->_member);               \
+        _instance->_member = NULL;              \
+    }                                           \
+} while(0)
 
 static void fc_post_run(struct flyingcat_s *fc)
 {
@@ -282,6 +336,10 @@ static void fc_post_run(struct flyingcat_s *fc)
         fc_log(fc->log, FC_LOG_INFO, "exit");
         fc_log_close(fc->log);
     }
+
+    FC_FREE_IF_ALLOC(fc, log_file);
+    FC_FREE_IF_ALLOC(fc, conf_file);
+    FC_FREE_IF_ALLOC(fc, pid_file);
 }
 
 int main(int argc, char *argv[])

@@ -22,6 +22,16 @@ if (BUILD_TYPE STREQUAL "DEBUG" OR DEBUG_LOG)
     add_definitions(-Wall)
 endif (BUILD_TYPE STREQUAL "DEBUG" OR DEBUG_LOG)
 
+if (LOG_PATH)
+    set(FC_LOG_PATH TRUE)
+endif (LOG_PATH)
+if (CONF_PATH)
+    set(FC_CONF_PATH TRUE)
+endif (CONF_PATH)
+if (PID_PATH)
+    set(FC_PID_PATH TRUE)
+endif (PID_PATH)
+
 # check header files
 include(CheckIncludeFiles)
 

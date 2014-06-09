@@ -5,6 +5,9 @@
 #define FLYINGCAT_NAME    "flyingcat"
 
 #define FC_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}"
+#cmakedefine FC_LOG_PATH  "${LOG_PATH}"
+#cmakedefine FC_CONF_PATH "${CONF_PATH}"
+#cmakedefine FC_PID_PATH  "${PID_PATH}"
 
 #cmakedefine FC_DEBUG_LOG
 
