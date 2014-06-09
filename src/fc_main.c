@@ -297,7 +297,7 @@ static void fc_print_sysinfo(struct flyingcat_s *fc)
 
 #define FC_MEMBER_ALLOC(_member) _member ## _alloc
 
-#define FC_STRCAT_IF_REALATIVE(_instance, _member, _path)  \
+#define FC_STRCAT_IF_RELATIVE(_instance, _member, _path)  \
 do {                                                       \
     if (_instance->_member[0] != FC_PATHSEP) {             \
         plen = strlen(fc->prefix);                         \
@@ -322,9 +322,9 @@ static int fc_init_instance(struct flyingcat_s *fc)
     char *p, *name;
     size_t plen, pathlen;
 
-    FC_STRCAT_IF_REALATIVE(fc, log_file,  fc->log_file);
-    FC_STRCAT_IF_REALATIVE(fc, conf_file, fc->conf_file);
-    FC_STRCAT_IF_REALATIVE(fc, pid_file,  fc->pid_file);
+    FC_STRCAT_IF_RELATIVE(fc, log_file,  fc->log_file);
+    FC_STRCAT_IF_RELATIVE(fc, conf_file, fc->conf_file);
+    FC_STRCAT_IF_RELATIVE(fc, pid_file,  fc->pid_file);
 
     fc->log = fc_log_create(fc->log_level, fc->log_file);
     if (!fc->log) {
