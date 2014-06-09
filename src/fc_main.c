@@ -84,6 +84,11 @@ static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
 
         case 'P':
             fc->prefix = optarg;
+            if (access(fc->prefix, X_OK) < 0) {
+                fc_log_stderr("access prefix directory (%s) failed: %s",
+                              fc->prefix, strerror(errno));
+                return FC_ERROR;
+            }
             break;
 
         case 'v':
@@ -110,8 +115,8 @@ static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
         case '?':
             switch (optopt) {
             case 'P':
-                fc_log_stderr(FLYINGCAT_NAME ": option -%c requires a directory name",
-                           optopt);
+                fc_log_stderr(FLYINGCAT_NAME ": option -%c requires a "
+                              "directory name", optopt);
                 break;
 
             case 'c':
@@ -122,7 +127,8 @@ static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
                 break;
 
             case 'v':
-                fc_log_stderr(FLYINGCAT_NAME ": option -%c requires a number", optopt);
+                fc_log_stderr(FLYINGCAT_NAME ": option -%c requires a number",
+                              optopt);
                 break;
 
             default:
