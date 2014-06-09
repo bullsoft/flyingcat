@@ -297,7 +297,7 @@ static void fc_print_sysinfo(struct flyingcat_s *fc)
 
 #define FC_MEMBER_ALLOC(_member) _member ## _alloc
 
-#define FC_STRCAT_IF_RELATIVE(_instance, _member, _path)  \
+#define FC_STRCAT_IF_RELATIVE(_instance, _member, _path)   \
 do {                                                       \
     if (_instance->_member[0] != FC_PATHSEP) {             \
         plen = strlen(fc->prefix);                         \
