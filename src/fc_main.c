@@ -202,7 +202,7 @@ static int fc_redirect_io(struct flyingcat_s *fc)
 
     umask(0);
 
-    fd = open(fc->log_file, O_RDWR);
+    fd = open(fc->log_file, O_RDWR | O_APPEND);
     if (fd < 0) {
         fc_log_error(fc->log, "open(\"%s\") failed: %s",
                      fc->log_file, strerror(errno));
@@ -360,5 +360,6 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    return 0;
+    fc_post_run(&fc);
+    exit(1);
 }
