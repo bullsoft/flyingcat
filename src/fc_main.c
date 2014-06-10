@@ -160,7 +160,7 @@ static void fc_show_usage()
 {
     fc_log_stderr(
         "Usage: " FLYINGCAT_NAME " [-hVtD] [-P prefix] [-v log_level] "
-                  "[-l log_file] [-p pid_file]" FC_LINEFEED
+        "[-l log_file] [-p pid_file]" FC_LINEFEED
     );
     fc_log_stderr(
         "Options:" FC_LINEFEED
