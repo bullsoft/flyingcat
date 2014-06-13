@@ -1,17 +1,21 @@
+# Copyright (C) 2014 Shang Yuanchun <idealities@gmail.com>
+
 project(flyingcat)
 
 cmake_minimum_required(VERSION 2.6)
 
-SET(FLYINGCAT_VERSION "0.0.1")
+message(STATUS "Running cmake version ${CMAKE_VERSION}")
+
+set(FLYINGCAT_VERSION "0.0.1")
 set(CMAKE_COLOR_MAKEFILE   ON)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 
-set(LIBPHENOM_PATH "" CACHE PATH "Path for libphenom")
-if (NOT LIBPHENOM_PATH)
-    message(SEND_ERROR
-        "Please specify libphenom path with -DLIBPHENOM_PATH=/path/to/libphenom")
-endif(NOT LIBPHENOM_PATH)
+# set(LIBPHENOM_PATH "" CACHE PATH "Path for libphenom")
+# if (NOT LIBPHENOM_PATH)
+#     message(SEND_ERROR
+#         "Please specify libphenom path with -DLIBPHENOM_PATH=/path/to/libphenom")
+# endif(NOT LIBPHENOM_PATH)
 
 # whether fc_log_debug() is available
 if (CMAKE_BUILD_TYPE)
@@ -43,16 +47,18 @@ check_function_exists(posix_memalign HAVE_POSIX_MEMALIGN)
 check_function_exists(memalign HAVE_MEMALIGN)
 check_function_exists(getopt_long HAVE_GETOPT_LONG)
 
-include_directories(${LIBPHENOM_PATH}/include
-                    ${CMAKE_CURRENT_BINARY_DIR}
+include_directories(${CMAKE_CURRENT_BINARY_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}/src
                     ${CMAKE_CURRENT_SOURCE_DIR}/src
                    )
 
-link_directories(${LIBPHENOM_PATH}/lib)
+if (LIBPHENOM_PATH)
+    include_directories(${LIBPHENOM_PATH}/include)
+    link_directories(${LIBPHENOM_PATH}/lib)
+endif (LIBPHENOM_PATH)
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-#set(CMAKE_INSTALL_RPATH "${LIBPHENOM_PATH}/lib")
+# set(CMAKE_INSTALL_RPATH "${LIBPHENOM_PATH}/lib")
 
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions(-D_GNU_SOURCE)
