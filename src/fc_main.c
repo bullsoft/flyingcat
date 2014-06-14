@@ -290,6 +290,11 @@ static int fc_write_pidfile(struct flyingcat_s *fc)
     return FC_OK;
 }
 
+static int fc_remove_pidfile(struct flyingcat_s *fc)
+{
+    return (unlink(fc->pid_file) < 0) ? FC_ERROR : FC_OK;
+}
+
 static void fc_set_default_instance(struct flyingcat_s *fc)
 {
     fc->prefix    = FC_INSTALL_PREFIX;
@@ -387,6 +392,11 @@ do {                                            \
 
 static void fc_post_run(struct flyingcat_s *fc)
 {
+    if (fc_remove_pidfile(fc) != FC_OK && fc->log) {
+        fc_log_error(fc->log, "remove pid file '%s' failed: %s",
+                     fc->pid_file, strerror(errno));
+    }
+
     if (fc->log) {
         fc_log(fc->log, FC_LOG_INFO, "exit");
         fc_log_close(fc->log);
