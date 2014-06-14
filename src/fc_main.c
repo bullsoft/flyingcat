@@ -260,6 +260,36 @@ DUP2FAILED:
     return FC_ERROR;
 }
 
+static int fc_write_pidfile(struct flyingcat_s *fc)
+{
+    int fd, len;
+    char pid[FC_INT64_LEN + 1];
+
+    fd = open(fc->pid_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd < 0) {
+        fc_log_error(fc->log, "open pid file '%s' failed: %s",
+                     fc->pid_file, strerror(errno));
+        return FC_ERROR;
+    }
+
+    len = snprintf(pid, FC_INT64_LEN + 1, "%d", fc->pid);
+    if (len < 0) {
+        close(fd);
+        return FC_ERROR;
+    }
+
+    pid[len++] = '\n';
+    if (write(fd, pid, len) < 0) {
+        fc_log_error(fc->log, "write pid file '%s' failed: %s",
+                     fc->pid_file, strerror(errno));
+        close(fd);
+        return FC_ERROR;
+    }
+
+    close(fd);
+    return FC_OK;
+}
+
 static void fc_set_default_instance(struct flyingcat_s *fc)
 {
     fc->prefix    = FC_INSTALL_PREFIX;
@@ -339,6 +369,9 @@ static int fc_init_instance(struct flyingcat_s *fc)
     }
 
     fc->pid = getpid();
+    if (fc_write_pidfile(fc) != FC_OK) {
+        return FC_ERROR;
+    }
 
     fc_print_sysinfo(fc);
     return FC_OK;
