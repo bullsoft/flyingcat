@@ -46,18 +46,18 @@ static int daemonize;
 
 static struct option long_options[] = {
     { "help",           no_argument,        NULL,   'h' },
-    { "version",        no_argument,        NULL,   'V' },
+    { "version",        no_argument,        NULL,   'v' },
     { "test-conf",      no_argument,        NULL,   't' },
     { "not-daemonize",  no_argument,        NULL,   'D' },
-    { "prefix",         required_argument,  NULL,   'P' },
-    { "verbose",        required_argument,  NULL,   'v' },
+    { "prefix",         required_argument,  NULL,   'p' },
+    { "verbose",        required_argument,  NULL,   'l' },
     { "conf-file",      required_argument,  NULL,   'c' },
-    { "log-file",       required_argument,  NULL,   'l' },
-    { "pid-file",       required_argument,  NULL,   'p' },
+    { "log-file",       required_argument,  NULL,   'L' },
+    { "pid-file",       required_argument,  NULL,   'P' },
     { NULL,             0,                  NULL,    0  }
 };
 
-static char short_options[] = "hVtDP:v:c:l:p:";
+static char short_options[] = "hvtDp:l:c:L:P:";
 
 static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
 {
@@ -80,7 +80,7 @@ static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
             show_help    = 1;
             break;
 
-        case 'V':
+        case 'v':
             show_version = 1;
             break;
 
@@ -92,7 +92,7 @@ static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
             daemonize = 0;
             break;
 
-        case 'P':
+        case 'p':
             fc->prefix = optarg;
             if (access(fc->prefix, X_OK) < 0) {
                 fc_log_stderr("access prefix directory (%s) failed: %s",
@@ -101,10 +101,10 @@ static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
             }
             break;
 
-        case 'v':
+        case 'l':
             value = atoi(optarg);
             if (value < 0) {
-                fc_log_stderr(FLYINGCAT_NAME ": option -v requires a number");
+                fc_log_stderr(FLYINGCAT_NAME ": option -l requires a number");
                 return FC_ERROR;
             }
             fc->log_level = value;
@@ -114,29 +114,29 @@ static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
             fc->conf_file = optarg;
             break;
 
-        case 'l':
+        case 'L':
             fc->log_file  = optarg;
             break;
 
-        case 'p':
+        case 'P':
             fc->pid_file  = optarg;
             break;
 
         case '?':
             switch (optopt) {
-            case 'P':
+            case 'p':
                 fc_log_stderr(FLYINGCAT_NAME ": option -%c requires a "
                               "directory name", optopt);
                 break;
 
             case 'c':
-            case 'l':
-            case 'p':
+            case 'L':
+            case 'P':
                 fc_log_stderr(FLYINGCAT_NAME ": option -%c requires a file name",
                            optopt);
                 break;
 
-            case 'v':
+            case 'l':
                 fc_log_stderr(FLYINGCAT_NAME ": option -%c requires a number",
                               optopt);
                 break;
@@ -159,24 +159,24 @@ static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
 static void fc_show_usage()
 {
     fc_log_stderr(
-        "Usage: " FLYINGCAT_NAME " [-hVtD] [-P prefix] [-v log_level] "
-        "[-l log_file] [-p pid_file]" FC_LINEFEED
+        "Usage: " FLYINGCAT_NAME " [-hvtD] [-p prefix] [-l log_level] "
+        "[-L log_file] [-P pid_file]" FC_LINEFEED
     );
     fc_log_stderr(
         "Options:" FC_LINEFEED
         "  -h, --help              : this help" FC_LINEFEED
-        "  -V, --version           : show version and exit" FC_LINEFEED
+        "  -v, --version           : show version and exit" FC_LINEFEED
         "  -t, --test-conf         : test configuration and exit" FC_LINEFEED
         "  -D, --not-daemonize     : do not daemonize" FC_LINEFEED
-        "  -P, --prefix            : set prefix path (default: "
+        "  -p, --prefix            : set prefix path (default: "
                                      FC_INSTALL_PREFIX ")" FC_LINEFEED
-        "  -v, --verbose           : set log level (default: %d, min: %d, max: %d)"
+        "  -l, --verbose           : set log level (default: %d, min: %d, max: %d)"
                                      FC_LINEFEED
         "  -c, --conf-file         : set configuration file (default: "
                                      FC_CONF_PATH ")" FC_LINEFEED
-        "  -l, --log-file          : set log file (default: "
+        "  -L, --log-file          : set log file (default: "
                                      FC_LOG_PATH ")" FC_LINEFEED
-        "  -p, --pid-file          : set pid file (default: "
+        "  -P, --pid-file          : set pid file (default: "
                                      FC_PID_PATH ")"
         , FC_LOG_DEFAULT, FC_LOG_EMERG, FC_LOG_VERB
     );
