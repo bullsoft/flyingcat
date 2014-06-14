@@ -373,6 +373,10 @@ static int fc_init_instance(struct flyingcat_s *fc)
         return FC_ERROR;
     }
 
+    if (fc_signal_init(fc->log) != FC_OK) {
+        return FC_ERROR;
+    }
+
     fc->pid = getpid();
     if (fc_write_pidfile(fc) != FC_OK) {
         return FC_ERROR;

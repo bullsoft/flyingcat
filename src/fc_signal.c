@@ -70,6 +70,22 @@ fc_signal_t signals[] = {
 
 int fc_signal_init(fc_log_t *log)
 {
+    fc_signal_t *sig;
+    struct sigaction sa;
+
+    for (sig = signals; sig->signo != 0; sig++) {
+        memset(&sa, 0, sizeof(sa));
+
+        sa.sa_handler = sig->handler;
+        sigemptyset(&sa.sa_mask);
+
+        if (sigaction(sig->signo, &sa, NULL) < 0) {
+            fc_log_error(log, "sigaction(%s) failed: %s",
+                         sig->signame, strerror(errno));
+            return FC_ERROR;
+        }
+    }
+
     return FC_OK;
 }
 
