@@ -4,6 +4,7 @@ set(flyingcat_SRCS
     fc_string.c
     fc_alloc.c
     fc_pool.c
+    fc_signal.c
 )
 
 add_executable(flyingcat ${flyingcat_SRCS})

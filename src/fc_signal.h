@@ -36,4 +36,14 @@
 #define FC_SIGNAL_RECONFIGURE   HUP
 #define FC_SIGNAL_REOPEN        USR1
 
+typedef struct {
+    int   signo;
+    char *signame;
+    char *name;
+    void (*handler)(int signo);
+} fc_signal_t;
+
+int  fc_signal_init(fc_log_t *log);
+void fc_signal_close(fc_log_t *log);
+
 #endif
