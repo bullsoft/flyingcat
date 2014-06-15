@@ -396,6 +396,8 @@ do {                                            \
 
 static void fc_post_run(struct flyingcat_s *fc)
 {
+    fc_signal_close(fc->log);
+
     if (fc_remove_pidfile(fc) != FC_OK && fc->log) {
         fc_log_error(fc->log, "remove pid file '%s' failed: %s",
                      fc->pid_file, strerror(errno));

@@ -95,5 +95,26 @@ void fc_signal_close(fc_log_t *log)
 
 void fc_signal_handler(int signo)
 {
+    char *action;
+    fc_signal_t *sig;
+
+    for (sig = signals; sig->signo != 0; sig++) {
+        if (sig->signo == signo) {
+            break;
+        }
+    }
+
+    switch(signo) {
+    case fc_signal_value(FC_SIGNAL_SHUTDOWN):
+        fc_quit = 1;
+        action  = "shutting down";
+        break;
+    default:
+        break;
+    }
+
+    fc_log(fc_context->log, FC_LOG_NOTICE, "signal %d(%s) received, %s",
+           signo, sig->signame, action);
+
 }
 

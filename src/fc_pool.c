@@ -20,7 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "fc_pool.h"
+#include "fc_core.h"
 
 static void *fc_palloc_large(fc_pool_t *pool, size_t size);
 static void *fc_palloc_block(fc_pool_t *pool, size_t size);

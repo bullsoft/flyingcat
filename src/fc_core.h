@@ -36,6 +36,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include <signal.h>
+
 typedef intptr_t     fc_int_t;
 typedef uintptr_t    fc_uint_t;
 typedef intptr_t     fc_flag_t;
@@ -45,6 +47,7 @@ typedef intptr_t     fc_flag_t;
 #include "fc_signal.h"
 #include "fc_alloc.h"
 #include "fc_pool.h"
+#include "fc_context.h"
 
 struct flyingcat_s {
     int   log_level;
