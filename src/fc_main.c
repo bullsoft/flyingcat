@@ -365,6 +365,8 @@ static int fc_init_instance(struct flyingcat_s *fc)
         return FC_ERROR;
     }
 
+    fc_print_sysinfo(fc);
+
     if (daemonize && fc_daemonize(fc->log) != FC_OK) {
         return FC_ERROR;
     }
@@ -382,7 +384,6 @@ static int fc_init_instance(struct flyingcat_s *fc)
         return FC_ERROR;
     }
 
-    fc_print_sysinfo(fc);
     return FC_OK;
 }
 
@@ -413,6 +414,18 @@ static void fc_post_run(struct flyingcat_s *fc)
     FC_FREE_IF_ALLOC(fc, pid_file);
 }
 
+static void fc_run(struct flyingcat_s *fc)
+{
+    fc_context_t *ctx;
+
+    ctx = fc_context_create(fc);
+    if (ctx == NULL) {
+        return;
+    }
+
+    fc_context_close(ctx);
+}
+
 int main(int argc, char *argv[])
 {
     int status;
@@ -438,6 +451,8 @@ int main(int argc, char *argv[])
         fc_post_run(&fc);
         exit(1);
     }
+
+    fc_run(&fc);
 
     fc_post_run(&fc);
     exit(1);
