@@ -133,7 +133,7 @@ static int fc_get_options(int argc, char *argv[], struct flyingcat_s *fc)
             case 'L':
             case 'P':
                 fc_log_stderr(FLYINGCAT_NAME ": option -%c requires a file name",
-                           optopt);
+                              optopt);
                 break;
 
             case 'l':
@@ -170,7 +170,8 @@ static void fc_show_usage()
         "  -D, --not-daemonize     : do not daemonize" FC_LINEFEED
         "  -p, --prefix            : set prefix path (default: "
                                      FC_INSTALL_PREFIX ")" FC_LINEFEED
-        "  -l, --verbose           : set log level (default: %d, min: %d, max: %d)"
+        "  -l, --verbose           : set log level (default: %d, min: %d "
+                                     "(less verbose), max: %d (more verbose))"
                                      FC_LINEFEED
         "  -c, --conf-file         : set configuration file (default: "
                                      FC_CONF_PATH ")" FC_LINEFEED
