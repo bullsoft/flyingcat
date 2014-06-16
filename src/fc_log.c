@@ -67,7 +67,7 @@ fc_log_t *fc_log_create(int level, const char *filename)
         return NULL;
     }
 
-    log->log_level = max(FC_LOG_VERB, min(FC_LOG_EMERG, level));
+    log->log_level = min(FC_LOG_VERB, max(FC_LOG_EMERG, level));
     log->file = (char *)filename;
     log->nerr = 0;
     if (!filename || !strlen(filename)) {
