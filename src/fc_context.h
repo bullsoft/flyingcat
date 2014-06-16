@@ -28,6 +28,7 @@
 struct fc_context_s {
     void *conf;
 
+    struct flyingcat_s *instance;
     fc_pool_t *pool;
     fc_log_t  *log;
 };
@@ -41,7 +42,7 @@ extern sig_atomic_t    fc_terminate;
 extern sig_atomic_t    fc_reconfigure;
 extern sig_atomic_t    fc_reopen;
 
-fc_context_t *fc_context_create(fc_log_t *log);
-void fc_context_close();
+fc_context_t *fc_context_create(struct flyingcat_s *fc);
+void fc_context_close(fc_context_t *ctx);
 
 #endif

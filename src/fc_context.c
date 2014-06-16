@@ -24,17 +24,38 @@
 
 fc_context_t *fc_context;
 
-sig_atomic_t    fc_quit;
-sig_atomic_t    fc_terminate;
-sig_atomic_t    fc_reconfigure;
-sig_atomic_t    fc_reopen;
+sig_atomic_t  fc_quit;
+sig_atomic_t  fc_terminate;
+sig_atomic_t  fc_reconfigure;
+sig_atomic_t  fc_reopen;
 
-fc_context_t *fc_context_create(fc_log_t *log)
+fc_context_t *fc_context_create(struct flyingcat_s *fc)
 {
-    return NULL;
+    fc_pool_t *pool;
+    fc_context_t *ctx;
+
+    pool = fc_pool_create(1024, fc->log);
+    if (pool == NULL) {
+        fc_log_error(fc->log, "create pool for context failed");
+        return NULL;
+    }
+
+    ctx = fc_palloc(pool, sizeof(fc_context_t));
+    if (ctx == NULL) {
+        fc_log_error(fc->log, "create context failed");
+        fc_pool_close(pool);
+        return NULL;
+    }
+
+    ctx->instance = fc;
+    ctx->pool = pool;
+    ctx->log  = fc->log;
+
+    return ctx;
 }
 
-void fc_context_close()
+void fc_context_close(fc_context_t *ctx)
 {
+    fc_pool_close(ctx->pool);
 }
 
