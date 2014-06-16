@@ -79,6 +79,7 @@ int fc_signal_init(fc_log_t *log)
         sa.sa_handler = sig->handler;
         sigemptyset(&sa.sa_mask);
 
+        fc_log_debug(log, FC_LOG_DEBUG, "sigaction(%s)", sig->signame);
         if (sigaction(sig->signo, &sa, NULL) < 0) {
             fc_log_error(log, "sigaction(%s) failed: %s",
                          sig->signame, strerror(errno));
