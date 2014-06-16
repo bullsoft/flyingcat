@@ -49,21 +49,14 @@ fc_signal_t signals[] = {
     {
       fc_signal_value(FC_SIGNAL_REOPEN),
       fc_signal_name(FC_SIGNAL_REOPEN),
-      "reload",
-      fc_signal_handler
-    },
-
-    {
-      fc_signal_value(FC_SIGNAL_REOPEN),
-      fc_signal_name(FC_SIGNAL_REOPEN),
-      "reload",
+      "reopen",
       fc_signal_handler
     },
 
     { SIGTTIN, "SIGTTIN", "", fc_signal_handler },
     { SIGTTOU, "SIGTTOU", "", fc_signal_handler },
     { SIGINT,  "SIGINT",  "", fc_signal_handler },
-    { SIGPIPE, "SIGTTOU", "", SIG_IGN },
+    { SIGPIPE, "SIGPIPE", "", SIG_IGN },
 
     { 0, NULL, "", NULL }
 };
