@@ -103,6 +103,18 @@ void fc_signal_handler(int signo)
         fc_quit = 1;
         action  = "shutting down";
         break;
+    case fc_signal_value(FC_SIGNAL_TERMINATE):
+        fc_terminate = 1;
+        action  = "exiting";
+        break;
+    case fc_signal_value(FC_SIGNAL_RECONFIGURE):
+        fc_reconfigure = 1;
+        action  = "reconfiguring";
+        break;
+    case fc_signal_value(FC_SIGNAL_REOPEN):
+        fc_reopen = 1;
+        action  = "reopening logs";
+        break;
     default:
         break;
     }
