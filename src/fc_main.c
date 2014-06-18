@@ -424,6 +424,7 @@ static void fc_run(struct flyingcat_s *fc)
         return;
     }
 
+    fc_context = ctx;
     fc_context_run(ctx);
 
     fc_context_close(ctx);
