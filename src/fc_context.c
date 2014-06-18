@@ -54,6 +54,13 @@ fc_context_t *fc_context_create(struct flyingcat_s *fc)
     return ctx;
 }
 
+void fc_context_run(fc_context_t *ctx)
+{
+    for (;;) {
+        break;
+    }
+}
+
 void fc_context_close(fc_context_t *ctx)
 {
     fc_pool_close(ctx->pool);

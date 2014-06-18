@@ -89,7 +89,7 @@ void fc_signal_close(fc_log_t *log)
 
 void fc_signal_handler(int signo)
 {
-    char *action;
+    const char *action;
     fc_signal_t *sig;
 
     for (sig = signals; sig->signo != 0; sig++) {

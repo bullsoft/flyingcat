@@ -43,6 +43,7 @@ extern sig_atomic_t    fc_reconfigure;
 extern sig_atomic_t    fc_reopen;
 
 fc_context_t *fc_context_create(struct flyingcat_s *fc);
+void fc_context_run(fc_context_t *ctx);
 void fc_context_close(fc_context_t *ctx);
 
 #endif
