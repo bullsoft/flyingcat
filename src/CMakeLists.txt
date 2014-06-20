@@ -6,6 +6,7 @@ set(flyingcat_SRCS
     fc_pool.c
     fc_signal.c
     fc_context.c
+    fc_array.c
 )
 
 add_executable(flyingcat ${flyingcat_SRCS})

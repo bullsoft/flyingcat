@@ -42,11 +42,18 @@ typedef intptr_t     fc_int_t;
 typedef uintptr_t    fc_uint_t;
 typedef intptr_t     fc_flag_t;
 
+#define FC_OK      0
+#define FC_ERROR  -1
+#define FC_AGAIN  -2
+#define FC_NOMEM  -3
+#define FC_ABORT  -4
+
 #include "fc_log.h"
 #include "fc_util.h"
 #include "fc_signal.h"
 #include "fc_alloc.h"
 #include "fc_pool.h"
+#include "fc_array.h"
 #include "fc_context.h"
 
 struct flyingcat_s {
@@ -64,11 +71,5 @@ struct flyingcat_s {
     char hostname[FC_MAXHOSTNAMELEN];
     fc_log_t *log;
 };
-
-#define FC_OK      0
-#define FC_ERROR  -1
-#define FC_AGAIN  -2
-#define FC_NOMEM  -3
-#define FC_ABORT  -4
 
 #endif
