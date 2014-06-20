@@ -42,7 +42,15 @@ void *fc_array_get(size_t idx)
     return NULL;
 }
 
-void  fc_array_close(fc_array_t *arr)
+void fc_array_close(fc_array_t *arr)
 {
-    return NULL;
+    fc_pool_t *p = arr->pool;
+
+    if ((u_char *)arr->data + arr->nalloc * arr->size == p->d.last) {
+        p->d.last -= arr->nalloc * arr->size;
+    }
+
+    if (p->d.last - sizeof(fc_array_t) == (u_char *)arr) {
+        p->d.last = (u_char *)arr;
+    }
 }
