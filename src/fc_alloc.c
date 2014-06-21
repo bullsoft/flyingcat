@@ -48,24 +48,25 @@ void *fc_memalign(size_t alignment, size_t size, fc_log_t *log)
 {
     void *p = NULL;
 
-#ifdef HAVE_POSIX_MEMALIGN
+    #ifdef HAVE_POSIX_MEMALIGN
     if (posix_memalign(&p, alignment, size) != 0) {
-#else
+    #else
     p = memalign(alignment, size);
     if (p == NULL) {
-#endif
+    #endif
         fc_log_error(log,
-#ifdef HAVE_POSIX_MEMALIGN
+            #ifdef HAVE_POSIX_MEMALIGN
             "posix_"
-#endif
+            #endif
             "memalign(%zu, %zu) failed", alignment, size);
     }
 
     fc_log_debug(log, FC_LOG_DEBUG,
-#ifdef HAVE_POSIX_MEMALIGN
+        #ifdef HAVE_POSIX_MEMALIGN
         "posix_"
-#endif
+        #endif
         "memalign: %zu at: %p with: %zu", size, p, alignment);
+
     return p;
 }
 #endif

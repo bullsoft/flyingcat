@@ -47,10 +47,12 @@ void *fc_array_push(fc_array_t *arr)
         if ((u_char *)arr->data + s == p->d.last
             && p->d.last + arr->size <= p->d.end) {
 
+            // current pool is enough for one more
             p->d.last += arr->size;
             arr->nalloc++;
 
         } else {
+            // if not, allocate 2 times of current size
             new = fc_palloc(p, s * 2);
             if (new == NULL) {
                 return NULL;
