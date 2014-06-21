@@ -76,7 +76,7 @@ void *fc_array_pop(fc_array_t *arr)
 
 void *fc_array_get(fc_array_t *arr, size_t idx)
 {
-    if (idx > arr->nalloc) {
+    if (idx >= arr->nalloc) {
         return NULL;
     }
 

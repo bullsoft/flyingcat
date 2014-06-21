@@ -31,6 +31,8 @@ struct fc_context_s {
     struct flyingcat_s *instance;
     fc_pool_t *pool;
     fc_log_t  *log;
+
+    fc_array_t *server;
 };
 
 typedef struct fc_context_s fc_context_t;

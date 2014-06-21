@@ -25,5 +25,18 @@
 
 #include "fc_core.h"
 
+struct fc_server_s {
+    struct string name;
+    struct string addrstr;
+
+    int family;
+    socklen_t addrlen;
+    in_port_t port;
+    struct sockaddr addr;
+    int timeout;
+    int backlog;
+};
+
+typedef struct fc_server_s fc_server_t;
 
 #endif

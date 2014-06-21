@@ -38,6 +38,10 @@
 
 #include <signal.h>
 
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/ip.h>
+
 typedef intptr_t     fc_int_t;
 typedef uintptr_t    fc_uint_t;
 typedef intptr_t     fc_flag_t;
@@ -54,6 +58,8 @@ typedef intptr_t     fc_flag_t;
 #include "fc_alloc.h"
 #include "fc_pool.h"
 #include "fc_array.h"
+#include "fc_string.h"
+#include "fc_server.h"
 #include "fc_context.h"
 
 struct flyingcat_s {

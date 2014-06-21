@@ -23,7 +23,16 @@
 #ifndef FC_STRING_H
 #define FC_STRING_H
 
+#include <sys/types.h>
 #include <stdarg.h>
+
+struct string {
+    u_char *data;
+    size_t  len;
+};
+
+#define string(_str) { _str, sizeof(_str) - 1 }
+#define null_string(_str) { NULL, 0 }
 
 #define fc_scnprintf(_buf, _size, ...)          \
         _scnprintf((char *)(_buf), (size_t)(_size), __VA_ARGS__)
