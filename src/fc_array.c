@@ -67,12 +67,18 @@ void *fc_array_push(fc_array_t *arr)
 
 void *fc_array_pop(fc_array_t *arr)
 {
-    return NULL;
+    arr->used--;
+
+    return (u_char *)arr->data + arr->used * arr->size;
 }
 
 void *fc_array_get(fc_array_t *arr, size_t idx)
 {
-    return NULL;
+    if (idx > arr->nalloc) {
+        return NULL;
+    }
+
+    return (u_char *)arr->data + idx * arr->size;
 }
 
 void fc_array_close(fc_array_t *arr)
