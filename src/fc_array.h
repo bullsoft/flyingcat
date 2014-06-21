@@ -38,7 +38,7 @@ typedef struct fc_array_s fc_array_t;
 fc_array_t *fc_array_create(fc_pool_t *pool, size_t n, size_t size);
 void *fc_array_push(fc_array_t *arr);
 void *fc_array_pop(fc_array_t *arr);
-void *fc_array_get(size_t idx);
+void *fc_array_get(fc_array_t *arr, size_t idx);
 void  fc_array_close(fc_array_t *arr);
 
 static inline int

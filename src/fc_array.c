@@ -24,12 +24,45 @@
 
 fc_array_t *fc_array_create(fc_pool_t *pool, size_t n, size_t size)
 {
-    return NULL;
+    fc_array_t *arr;
+
+    arr = fc_palloc(pool, sizeof(fc_array_t));
+    if (arr == NULL) {
+        return NULL;
+    }
+
+    return (fc_array_init(arr, pool, n, size) == FC_OK ? arr : NULL);
 }
 
 void *fc_array_push(fc_array_t *arr)
 {
-    return NULL;
+    void  *new;
+    size_t s;
+    fc_pool_t *p;
+
+    if (arr->used == arr->nalloc) {
+        s = arr->nalloc * arr->size;
+        p = arr->pool;
+
+        if ((u_char *)arr->data + s == p->d.last
+            && p->d.last + arr->size <= p->d.end) {
+
+            p->d.last += arr->size;
+            arr->nalloc++;
+
+        } else {
+            new = fc_palloc(p, s * 2);
+            if (new == NULL) {
+                return NULL;
+            }
+
+            memcpy(new, arr->data, s);
+            arr->nalloc *= 2;
+            arr->data = new;
+        }
+    }
+
+    return (u_char *)arr->data + arr->used++ * arr->size;
 }
 
 void *fc_array_pop(fc_array_t *arr)
@@ -37,7 +70,7 @@ void *fc_array_pop(fc_array_t *arr)
     return NULL;
 }
 
-void *fc_array_get(size_t idx)
+void *fc_array_get(fc_array_t *arr, size_t idx)
 {
     return NULL;
 }
