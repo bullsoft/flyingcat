@@ -103,6 +103,6 @@ void  fc_log_close(fc_log_t  *log);
 void  fc_log_reopen(fc_log_t *log);
 void _log(fc_log_t *log, const char *file, int line, int level,
           const char *fmt, ...) __attribute__((format(printf, 5, 6)));
-void _log_stderr(const char *fmt, ...) __attribute((format(printf, 1, 2)));
+void _log_stderr(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 
 #endif
