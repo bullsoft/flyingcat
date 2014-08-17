@@ -22,7 +22,9 @@
 
 #include "fc_alloc.h"
 
-#include <malloc.h>
+#ifdef HAVE_MEMALIGN
+# include <malloc.h>
+#endif
 
 void *fc_alloc(size_t size, fc_log_t *log)
 {
