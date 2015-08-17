@@ -46,6 +46,7 @@ check_function_exists(backtrace_symbols HAVE_BACKTRACE_SYMBOLS)
 check_function_exists(posix_memalign HAVE_POSIX_MEMALIGN)
 check_function_exists(memalign HAVE_MEMALIGN)
 check_function_exists(getopt_long HAVE_GETOPT_LONG)
+check_function_exists(getifaddrs HAVE_GETIFADDRS)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}/src
