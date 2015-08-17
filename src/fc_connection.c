@@ -33,6 +33,20 @@ static int is_addr_valid(int af, const char *addr)
         return FC_ERROR;
     }
 
+    switch (af) {
+    case AF_INET:
+        if (((struct in_addr *)binaddr)->s_addr == INADDR_ANY) {
+            return FC_OK;
+        }
+        break;
+    case AF_INET6:
+        if (IN6_ARE_ADDR_EQUAL((struct in6_addr *)binaddr,
+                    &in6addr_any)) {
+            return FC_OK;
+        }
+        break;
+    }
+
     if (getifaddrs(&addrs) <  0) {
         return FC_ERROR;
     }
@@ -40,7 +54,7 @@ static int is_addr_valid(int af, const char *addr)
         switch(p->ifa_addr->sa_family) {
         case AF_INET:
             if (((struct sockaddr_in *)p->ifa_addr)->sin_addr.s_addr
-                    == *(in_addr_t *)binaddr) {
+                    == ((struct in_addr *)binaddr)->s_addr) {
                 freeifaddrs(addrs);
                 return FC_OK;
             }
