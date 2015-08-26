@@ -98,6 +98,7 @@ void fc_signal_handler(int signo)
         }
     }
 
+    action = "";
     switch(signo) {
     case fc_signal_value(FC_SIGNAL_SHUTDOWN):
         fc_quit = 1;
