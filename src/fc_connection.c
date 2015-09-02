@@ -23,6 +23,7 @@
 #include "fc_core.h"
 
 #include <ifaddrs.h>
+#include <arpa/inet.h>
 
 static int is_addr_valid(int af, const char *addr)
 {
