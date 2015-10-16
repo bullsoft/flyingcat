@@ -134,7 +134,7 @@ void _log(fc_log_t *log, const char *file, int line, int level, const char *fmt,
     size = FC_MAX_ERR_STR;
     len += fc_scnprintf(buf + len, size - len, "[%02d-%02d %02d:%02d:%02d.%ld] "
                                                "[%*s] [%-12s:%-4d] ",
-                        tm->tm_mon,  tm->tm_mday,
+                        tm->tm_mon + 1,  tm->tm_mday,
                         tm->tm_hour, tm->tm_min, tm->tm_sec,
                         tv.tv_usec,
                         MAX_LEVEL_DESC_LEN,
